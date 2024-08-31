@@ -1,3 +1,5 @@
+import traceback
+
 import numpy as np
 
 from audio import config
@@ -14,8 +16,8 @@ def process_audio():
     print("Listening for the word 'Jarvis'...")
 
     # Buffer to hold audio for each recognition pass
-    audio_buffer = np.array([], dtype=np.float32)
-    pause_audio_buffer = np.array([], dtype=np.float32)  # Checking for a longer pause in commands
+    audio_buffer = np.array([], dtype=np.int16)
+    pause_audio_buffer = np.array([], dtype=np.int16)  # Checking for a longer pause in commands
     is_recording_command = False
 
     while True:
@@ -29,7 +31,7 @@ def process_audio():
             audio_buffer = np.concatenate((audio_buffer, audio_chunk))
 
             # When buffer is long enough, run simple text recognition, check for keyword and reset buffer
-            run_recognition = len(audio_buffer) > config.RATE * config.AUDIO_CHUNK_LENGTH
+            run_process = len(audio_buffer) > config.RATE * config.AUDIO_CHUNK_LENGTH
 
             if is_recording_command:
                 # This code is run multiple times until a long enough pause is detected --> command_finished = True
@@ -40,9 +42,12 @@ def process_audio():
                         # In DEV, only one command needed, stop listening after processing the command
                         return
                     reset_buffers = True
-            elif run_recognition:
+            elif run_process:
                 # This code is run once, every AUDIO_CHUNK_LENGTH seconds
-                found_keyword = check_for_keyword(audio_buffer)
+                found_keyword = False
+                speech_detected = np.mean(np.abs(audio_buffer)) > config.SILENCE_THRESHOLD
+                if speech_detected:
+                    found_keyword = check_for_keyword(audio_buffer) if speech_detected else False
                 if found_keyword:
                     is_recording_command = True
                     # Do not reset buffers here, as the command starts in this buffer and is needed for processing
@@ -59,6 +64,7 @@ def process_audio():
 
         except Exception as e:
             print(f"Error recognizing audio: {e}")
+            traceback.print_exc()
 
 
 def record_command(audio_buffer: np.array, pause_audio_buffer: np.array, new_audio_chunk: np.array):
@@ -67,7 +73,7 @@ def record_command(audio_buffer: np.array, pause_audio_buffer: np.array, new_aud
 
     pause_buffer_long_enough = len(pause_audio_buffer) > config.RATE * config.COMMAND_END_PAUSE_LENGTH
 
-    is_end = pause_buffer_long_enough and np.mean(np.abs(pause_audio_buffer)) < config.PAUSE_THRESHOLD
+    is_end = pause_buffer_long_enough and np.mean(np.abs(pause_audio_buffer)) < config.SILENCE_THRESHOLD
     command_length_exceeded = len(audio_buffer) > config.RATE * config.MAX_COMMAND_LENGTH
 
     if is_end or command_length_exceeded:
@@ -87,13 +93,13 @@ def check_for_keyword(audio_buffer: np.array):
     print("Processing audio chunk...")
 
     # Run recognition on the accumulated audio with simpler model
-    result = speech_to_text(audio_buffer)
+    result_txt = speech_to_text(audio_buffer)
 
     # Print recognized text
-    print(f"Got: {result['text']}")
+    print(f"Got: {result_txt}")
 
     # Check for the keyword "Jarvis"
-    if config.KEYWORD in result['text'].lower():
+    if config.KEYWORD in result_txt.lower():
         print("Keyword 'Jarvis' detected! Start recording command...")
         return True
     return False

@@ -20,7 +20,7 @@ def record_audio():
             audio_data = stream.read(config.CHUNK, exception_on_overflow=False)
 
             # Convert audio data to numpy array and normalize
-            audio_array = np.frombuffer(audio_data, dtype=np.int16).astype(np.float32) / 32768.0
+            audio_array = np.frombuffer(audio_data, dtype=np.int16)
 
             # Put the audio data into the queue
             audio_queue.put(audio_array)
