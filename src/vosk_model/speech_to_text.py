@@ -38,5 +38,5 @@ def speech_to_text(audio: np.array, model_type="en"):
 
     print("Result dict:", result_dict)
     end = datetime.now()
-    print("oy", end - start)
+    print("Time to process the command", end - start)
     return recognized_text
