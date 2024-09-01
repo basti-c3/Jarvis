@@ -2,6 +2,10 @@
 import pyaudio
 from vosk import SetLogLevel
 
+BUFFER_DURATION = 0.5  # Duration of each buffer in seconds
+AUDIO_RATE = 16000  # Sample rate in Hz
+
+
 CHUNK = 1024  # Buffer size
 FORMAT = pyaudio.paInt16  # 16-bit resolution for vosk
 CHANNELS = 1  # Mono audio for vosk

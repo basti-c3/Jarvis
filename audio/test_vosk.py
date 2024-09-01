@@ -1,57 +1,59 @@
 import os
-import wave
-import json
+import threading
+import queue
+import sounddevice as sd
+import numpy as np
 from vosk import Model, KaldiRecognizer
 
-# Path to your Vosk model directory
-model_path = "../models/vosk-model-small-en-us-0.15"
+# Configuration Parameters
+AUDIO_RATE = 16000  # Sample rate in Hz
+BUFFER_DURATION = 0.5  # Duration of each buffer in seconds
 
-# Load the Vosk model
+# Initialize Vosk Model and Recognizer
+model_path = "../models/vosk-model-small-en-us-0.15"
 if not os.path.exists(model_path):
-    print(
-        f"Please download the model from https://alphacephei.com/vosk/models and unpack as '{model_path}' in the current folder.")
+    print(f"Model path {model_path} not found. Please provide the correct model path.")
     exit(1)
 
 model = Model(model_path)
+recognizer = KaldiRecognizer(model, AUDIO_RATE)
 
-# Open the audio file you want to transcribe
-wav_file_path = "../music_text.wav"
+# Queue to hold audio data for processing
+audio_queue = queue.Queue()
 
-# Ensure your audio file is in the correct format (Mono PCM WAV format)
-wf = wave.open(wav_file_path, "rb")
-if wf.getnchannels() != 1 or wf.getsampwidth() != 2 or wf.getcomptype() != "NONE":
-    print("Audio file must be WAV format mono PCM.")
-    exit(1)
+def audio_callback(indata, frames, time, status):
+    """Callback function for sounddevice to receive audio data."""
+    if status:
+        print(status, flush=True)
+    # Convert audio data to bytes and put it in the queue
+    audio_queue.put(indata.copy())
 
-# Initialize the recognizer with the model and sample rate
-recognizer = KaldiRecognizer(model, wf.getframerate())
+def recognize_audio_stream():
+    """Thread function to recognize audio data from the stream in real-time."""
+    while True:
+        try:
+            data = audio_queue.get(timeout=1)  # Get audio data from the queue
+            if recognizer.AcceptWaveform(data.tobytes()):
+                result = recognizer.Result()
+                print(f"Full Result: {result}")
+            else:
+                partial_result = recognizer.PartialResult()
+                print(f"Partial Result: {partial_result}")
+        except queue.Empty:
+            continue  # Continue if the queue is empty
 
-# Initialize an empty string to accumulate the recognized text
-recognized_text = ""
+# Start the audio recognition thread
+recognition_thread = threading.Thread(target=recognize_audio_stream)
+recognition_thread.daemon = True
+recognition_thread.start()
 
-# Process the audio file in chunks
-while True:
-    data = wf.readframes(4000)
-    if len(data) == 0:
-        break
-    if recognizer.AcceptWaveform(data):
-        result = recognizer.Result()
-        result_text = json.loads(result).get('text', '')
-        recognized_text += result_text + " "  # Accumulate recognized text
-    else:
-        partial_result = recognizer.PartialResult()
-        partial_text = json.loads(partial_result).get('partial', '')
-        print("Partial text recognized: ", partial_text)
-        recognized_text += partial_text + " "  # Accumulate partial text
+print("Listening... Press Ctrl+C to stop.")
 
-# Get the final result after processing all chunks
-final_result = recognizer.FinalResult()
-final_text = json.loads(final_result).get('text', '')
-recognized_text += final_text  # Append final result to the accumulated text
-
-# Print the complete recognized text
-print("Full Recognized Text:")
-print(recognized_text)
-
-# Close the audio file
-wf.close()
+try:
+    with sd.InputStream(samplerate=AUDIO_RATE, channels=1, dtype='int16', callback=audio_callback, blocksize=int(BUFFER_DURATION * AUDIO_RATE)):
+        while True:
+            pass  # Keep the main thread alive while audio processing occurs in the background
+except KeyboardInterrupt:
+    print("Stopping...")
+finally:
+    print("Resources cleaned up. Exiting program.")

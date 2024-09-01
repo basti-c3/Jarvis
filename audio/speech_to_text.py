@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 from vosk import Model, KaldiRecognizer
 import numpy as np
@@ -8,26 +9,12 @@ from audio.utils import Warn
 import json
 
 
+model = Model("models/vosk-model-small-en-us-0.15")
+recognizer = KaldiRecognizer(model, config.AUDIO_RATE)
+
 def speech_to_text(audio: np.array, model_type="en"):
-    if model_type not in ["en", "de"]:
-        Warn(f"Error in speech_to_text: model_type {model_type} unknown. Fall back to model_type base")
-        model_type = "en"
-
-    if model_type == "en":
-        model_path = "models/vosk-model-small-en-us-0.15"
-    elif model_type == "de":
-        model_path = ""  # todo
-    else:
-        raise Exception("Error in speech_to_text: model not defined")
-
-    if not os.path.exists(model_path):
-        print("Please give the correct path to the model you are looking for.")
-        exit(1)
-
-    model = Model(model_path)
-    recognizer = KaldiRecognizer(model, config.RATE)
-
     # Ensure the audio buffer is in the correct format (16kHz, mono, PCM 16-bit)
+    start = datetime.now()
     if isinstance(audio, np.ndarray):
         if audio.dtype != np.int16:
             print(f"Converting audio to int16 format... from {audio.dtype}")
@@ -48,4 +35,6 @@ def speech_to_text(audio: np.array, model_type="en"):
     recognized_text = result_dict.get('text', "")
 
     print("Result dict:", result_dict)
+    end = datetime.now()
+    print("oy", end - start)
     return recognized_text
