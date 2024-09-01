@@ -1,7 +1,7 @@
 # Jarvis
 
 ## Description
-Welcome to our project! This is a a try to create JARVIS model in Python. 
+Welcome to our project! This is a try to create JARVIS model in Python. `git clone us bitch`
 
 ## Contributing
 We welcome any and all contributions! Here are some ways you can get started:
@@ -11,5 +11,9 @@ We welcome any and all contributions! Here are some ways you can get started:
 4. Documentation: If you see the need for some additional documentation, feel free to add some!
 
 ## TODOs
+1. Test the following githubs 
+   2. [Vosk](https://github.com/alphacep/vosk-api) and [Vosk-link](https://alphacephei.com/vosk/models)
+   3. [DeepSpeach](https://github.com/mozilla/DeepSpeech)
+2. Implement **speech detection** *fully*
 
 
