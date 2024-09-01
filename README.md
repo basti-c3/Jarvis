@@ -24,7 +24,7 @@ We welcome any and all contributions! Here are some ways you can get started:
 
 
 
-
+[main.py](src/main.py)
 
 `git clone us bitch`
 
