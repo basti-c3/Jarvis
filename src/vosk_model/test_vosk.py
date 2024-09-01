@@ -9,7 +9,7 @@ AUDIO_RATE = 16000  # Sample rate in Hz
 BUFFER_DURATION = 0.5  # Duration of each buffer in seconds
 
 # Initialize Vosk Model and Recognizer
-model_path = "../models/vosk-model-small-en-us-0.15"
+model_path = "../models/../models/vosk-model-small-en-us-0.15"
 if not os.path.exists(model_path):
     print(f"Model path {model_path} not found. Please provide the correct model path.")
     exit(1)
