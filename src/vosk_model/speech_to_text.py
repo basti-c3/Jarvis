@@ -4,13 +4,15 @@ from datetime import datetime
 from vosk import Model, KaldiRecognizer
 import numpy as np
 
-from audio import config
-from audio.utils import Warn
+import src.vosk_model.config as config
 import json
 
-
-model = Model("models/vosk-model-small-en-us-0.15")
+model_path = "../models/vosk-model-small-en-us-0.15"
+if not os.path.exists(model_path):
+    raise Exception(f"Error: No model at path {os.path.abspath(model_path)}")
+model = Model(model_path)
 recognizer = KaldiRecognizer(model, config.AUDIO_RATE)
+
 
 def speech_to_text(audio: np.array, model_type="en"):
     # Ensure the vosk buffer is in the correct format (16kHz, mono, PCM 16-bit)

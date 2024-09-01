@@ -1,8 +1,8 @@
 import threading
 import sounddevice as sd
-import audio.config as config
-from audio.audio_listening import audio_callback
-from audio.process_audio import process_audio
+import vosk_model.config as config
+from vosk_model.audio_listening import audio_callback
+from vosk_model.process_audio import process_audio
 
 if __name__ == "__main__":
     # Create and start the recording thread
@@ -14,7 +14,7 @@ if __name__ == "__main__":
         with sd.InputStream(samplerate=config.AUDIO_RATE, channels=1, dtype='int16', callback=audio_callback,
                             blocksize=int(config.BUFFER_DURATION * config.AUDIO_RATE)):
             while True:
-                pass  # Keep the main thread alive while vosk processing occurs in the background
+                pass  # Keep the main thread alive while vosk_model processing occurs in the background
     except KeyboardInterrupt:
         print("Stopping...")
     finally:

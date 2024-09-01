@@ -1,7 +1,7 @@
 import numpy as np
 
-from audio import config
-from audio.speech_to_text import speech_to_text
+import src.vosk_model.config as config
+from src.vosk_model.speech_to_text import speech_to_text
 
 
 def record_command(audio_buffer: np.array, pause_audio_buffer: np.array, new_audio_chunk: np.array):
