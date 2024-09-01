@@ -1,5 +1,29 @@
+import numpy as np
+
 from audio import config
 from audio.speech_to_text import speech_to_text
+
+
+def record_command(audio_buffer: np.array, pause_audio_buffer: np.array, new_audio_chunk: np.array):
+    # Append the new chunk to the pause detection buffer
+    pause_audio_buffer = np.concatenate((pause_audio_buffer, new_audio_chunk))
+
+    pause_buffer_long_enough = len(pause_audio_buffer) > config.RATE * config.COMMAND_END_PAUSE_LENGTH
+
+    is_end = pause_buffer_long_enough and np.mean(np.abs(pause_audio_buffer)) < config.SILENCE_THRESHOLD
+    command_length_exceeded = len(audio_buffer) > config.RATE * config.MAX_COMMAND_LENGTH
+
+    if is_end or command_length_exceeded:
+        if is_end:
+            print("Detected pause in speech. Ending command capture...")
+        else:
+            print(f"Maximum command length of {config.MAX_COMMAND_LENGTH} was reached. Ending command capture...")
+        process_command(audio_buffer)  # Process command
+        return True, pause_audio_buffer
+    if pause_buffer_long_enough:
+        # Remove the first audio chunk to maintain the same length
+        pause_audio_buffer = pause_audio_buffer[len(new_audio_chunk):]
+    return False, pause_audio_buffer
 
 
 def process_command(audio):
