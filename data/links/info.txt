@@ -1,1 +1,4 @@
-
+https://www.freecodecamp.org/news/python-project-how-to-build-your-own-jarvis-using-python/
+https://medium.com/@dallinpstewart/how-to-create-iron-mans-jarvis-with-python-db3a70b3a791
+https://medium.com/hackerdawn/build-iron-mans-jarvis-using-python-5e4942b7c979
+https://plainenglish.io/blog/jarvis-gpt-create-your-own-version-of-jarvis-from-iron-man-using-python-and-openai-api
