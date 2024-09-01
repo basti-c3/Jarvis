@@ -14,7 +14,7 @@ if __name__ == "__main__":
         with sd.InputStream(samplerate=config.AUDIO_RATE, channels=1, dtype='int16', callback=audio_callback,
                             blocksize=int(config.BUFFER_DURATION * config.AUDIO_RATE)):
             while True:
-                pass  # Keep the main thread alive while audio processing occurs in the background
+                pass  # Keep the main thread alive while vosk processing occurs in the background
     except KeyboardInterrupt:
         print("Stopping...")
     finally:

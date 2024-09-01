@@ -17,23 +17,23 @@ if not os.path.exists(model_path):
 model = Model(model_path)
 recognizer = KaldiRecognizer(model, AUDIO_RATE)
 
-# Queue to hold audio data for processing
+# Queue to hold vosk data for processing
 audio_queue = queue.Queue()
 
 
 def audio_callback(indata, frames, time, status):
-    """Callback function for sounddevice to receive audio data."""
+    """Callback function for sounddevice to receive vosk data."""
     if status:
         print(status, flush=True)
-    # Convert audio data to bytes and put it in the queue
+    # Convert vosk data to bytes and put it in the queue
     audio_queue.put(indata.copy())
 
 
 def recognize_audio_stream():
-    """Thread function to recognize audio data from the stream in real-time."""
+    """Thread function to recognize vosk data from the stream in real-time."""
     while True:
         try:
-            data = audio_queue.get(timeout=1)  # Get audio data from the queue
+            data = audio_queue.get(timeout=1)  # Get vosk data from the queue
             if recognizer.AcceptWaveform(data.tobytes()):
                 result = recognizer.Result()
                 print(f"Full Result: {result}")
@@ -44,7 +44,7 @@ def recognize_audio_stream():
             continue  # Continue if the queue is empty
 
 
-# Start the audio recognition thread
+# Start the vosk recognition thread
 recognition_thread = threading.Thread(target=recognize_audio_stream)
 recognition_thread.daemon = True
 recognition_thread.start()
@@ -55,7 +55,7 @@ try:
     with sd.InputStream(samplerate=AUDIO_RATE, channels=1, dtype='int16', callback=audio_callback,
                         blocksize=int(BUFFER_DURATION * AUDIO_RATE)):
         while True:
-            pass  # Keep the main thread alive while audio processing occurs in the background
+            pass  # Keep the main thread alive while vosk processing occurs in the background
 except KeyboardInterrupt:
     print("Stopping...")
 finally:

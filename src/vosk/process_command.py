@@ -21,7 +21,7 @@ def record_command(audio_buffer: np.array, pause_audio_buffer: np.array, new_aud
         process_command(audio_buffer)  # Process command
         return True, pause_audio_buffer
     if pause_buffer_long_enough:
-        # Remove the first audio chunk to maintain the same length
+        # Remove the first vosk chunk to maintain the same length
         pause_audio_buffer = pause_audio_buffer[len(new_audio_chunk):]
     return False, pause_audio_buffer
 

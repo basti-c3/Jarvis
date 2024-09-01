@@ -13,7 +13,7 @@ model = Model("models/vosk-model-small-en-us-0.15")
 recognizer = KaldiRecognizer(model, config.AUDIO_RATE)
 
 def speech_to_text(audio: np.array, model_type="en"):
-    # Ensure the audio buffer is in the correct format (16kHz, mono, PCM 16-bit)
+    # Ensure the vosk buffer is in the correct format (16kHz, mono, PCM 16-bit)
     start = datetime.now()
     if isinstance(audio, np.ndarray):
         if audio.dtype != np.int16:

@@ -25,5 +25,5 @@ def convert_to_wav(audio_file_path, wav_path, type="mp3"):
 
 
 mp3_file_path = "../music_text.ogg"
-wav_file_path = "../music_text.wav"
+wav_file_path = "../data/audiofiles/music_text.wav"
 convert_to_wav(mp3_file_path, wav_file_path, "ogg")
