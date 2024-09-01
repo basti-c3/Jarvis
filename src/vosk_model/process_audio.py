@@ -1,17 +1,14 @@
 import queue
 import traceback
 
-import numpy as np
-
-from audio import config
-from audio.global_vars import audio_queue
-from audio.process_command import process_command
-from audio.speech_to_text import recognizer
+import src.vosk_model.config as config
+from src.vosk_model.global_vars import audio_queue
+from src.vosk_model.speech_to_text import recognizer
 
 
 def process_audio():
     """
-        Continuously process vosk data from the queue and perform speech recognition
+        Continuously process vosk_model data from the queue and perform speech recognition
         to detect if a command is coming in.
      """
     print("Listening for the word 'Jarvis'...")
@@ -20,8 +17,8 @@ def process_audio():
 
     while True:
         try:
-            # Get vosk data from the queue
-            audio_chunk = audio_queue.get(timeout=1)  # Get vosk data from the queue
+            # Get vosk_model data from the queue
+            audio_chunk = audio_queue.get(timeout=1)  # Get vosk_model data from the queue
             if recognizer.AcceptWaveform(audio_chunk.tobytes()):
                 result = recognizer.Result()
                 if config.KEYWORD in result.lower():
@@ -37,5 +34,5 @@ def process_audio():
         except queue.Empty:
             continue  # Continue if the queue is empty
         except Exception as e:
-            print(f"Error recognizing vosk: {e}")
+            print(f"Error recognizing vosk_model: {e}")
             traceback.print_exc()
