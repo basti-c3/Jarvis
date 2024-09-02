@@ -1,5 +1,7 @@
 **/__pycache__/**
 *.pyc
 .idea/
+/.env
+.env
 /models/*
 !/models/Readme.md
