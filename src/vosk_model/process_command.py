@@ -1,13 +1,14 @@
 import numpy as np
 
 import src.vosk_model.config as config
+from src.global_init import spotify
+from src.utils import Warn
 from src.vosk_model.speech_to_text import speech_to_text
 
 
 def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chunk: np.array):
     print("Audio buffer shape:", audio_buffer.shape)
     print("New audio chunk shape:", new_audio_chunk.shape)
-    print("eee", pause_buffer)
 
     audio_buffer = np.concatenate((audio_buffer, new_audio_chunk))
     pause_buffer = np.concatenate((pause_buffer, new_audio_chunk))
@@ -27,16 +28,14 @@ def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chu
             print("Detected pause in speech. Ending command capture...")
         else:
             print(f"Maximum command length of {config.MAX_COMMAND_LENGTH} was reached. Ending command capture...")
-        process_command(audio_buffer)  # Process command
+        command_str = get_command_text(audio_buffer)
+        process_command(command_str)  # Process command
         return True, audio_buffer, pause_buffer
     return False, audio_buffer, pause_buffer
 
 
-def process_command(audio):
-    if config.DEV:
-        result_command = speech_to_text(audio)
-    else:
-        result_command = speech_to_text(audio)
+def get_command_text(audio):
+    result_command = speech_to_text(audio)
     print("--------------------------------------------------------")
     print(f"Recognized Command: {result_command}")
 
@@ -48,10 +47,39 @@ def process_command(audio):
 
         # Slice the string to get the text after the keyword
         text_after_keyword = result_command[start_index:].strip()
-
-        print(f"Text following the keyword '{config.KEYWORD}': {text_after_keyword}")
-
-        if 'turtle' in text_after_keyword.lower():
-            print("Turtle recognized!!!")
+        return text_after_keyword
     else:
-        print(f"The keyword '{config.KEYWORD}' was not found in the text.")
+        raise Exception(f"Error in get_command_text: The keyword '{config.KEYWORD}' was not found in the text.")
+
+
+def process_command(command_str):
+    command_str_lower = command_str.lower()
+    if 'play' in command_str_lower and 'spotify' in command_str_lower:
+        play_index = command_str_lower.find('play')
+        spotify_index = command_str_lower.find('spotify')
+        if play_index < spotify_index:  # play is before spotify in the query
+            # Extract the substring between 'play' and 'spotify'
+            extracted_command = command_str_lower[play_index + len('play'):spotify_index].strip()
+
+            # Split to remove the word immediately before 'spotify'
+            words = extracted_command.split()
+            if len(words) > 1:
+                # Remove the last word (the one immediately before 'spotify', for example 'on'/'in'/'with'/'from')
+                words.pop()
+                extracted_command = ' '.join(words)  # Join the remaining words to get the final result
+        else:
+            extracted_command = command_str_lower[play_index + len('play'):].strip()
+
+        if 'artist' in extracted_command:  # remove artist from query and search for artists
+            extracted_command = extracted_command.replace("artist", "")
+            spotify.play_artist(extracted_command)
+        elif 'song' in extracted_command:
+            extracted_command = extracted_command.replace("song", "")
+            spotify.play_track(extracted_command)
+        elif 'album' in extracted_command:
+            extracted_command = extracted_command.replace("album", "")
+            spotify.play_album(extracted_command)
+        else:
+            # Default search for tracks
+            spotify.play_track(extracted_command)
+        print(f"Tried to handle extracted_command: {extracted_command}")

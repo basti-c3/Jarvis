@@ -4,7 +4,7 @@ import traceback
 import numpy as np
 
 import src.vosk_model.config as config
-from src.vosk_model.global_vars import audio_queue
+from src.global_init import audio_queue
 from src.vosk_model.process_command import record_command
 from src.vosk_model.speech_to_text import recognizer
 
