@@ -1,8 +1,9 @@
 import numpy as np
 
 import src.vosk_model.config as config
-from src.global_init import spotify
-from src.utils import Warn
+from src.spotify.commands import extract_spotify_command
+
+from src.spotify.SpotifyCommand import SpotifyCommand
 from src.vosk_model.speech_to_text import speech_to_text
 
 
@@ -54,32 +55,6 @@ def get_command_text(audio):
 
 def process_command(command_str):
     command_str_lower = command_str.lower()
-    if 'play' in command_str_lower and 'spotify' in command_str_lower:
-        play_index = command_str_lower.find('play')
-        spotify_index = command_str_lower.find('spotify')
-        if play_index < spotify_index:  # play is before spotify in the query
-            # Extract the substring between 'play' and 'spotify'
-            extracted_command = command_str_lower[play_index + len('play'):spotify_index].strip()
-
-            # Split to remove the word immediately before 'spotify'
-            words = extracted_command.split()
-            if len(words) > 1:
-                # Remove the last word (the one immediately before 'spotify', for example 'on'/'in'/'with'/'from')
-                words.pop()
-                extracted_command = ' '.join(words)  # Join the remaining words to get the final result
-        else:
-            extracted_command = command_str_lower[play_index + len('play'):].strip()
-
-        if 'artist' in extracted_command:  # remove artist from query and search for artists
-            extracted_command = extracted_command.replace("artist", "")
-            spotify.play_artist(extracted_command)
-        elif 'song' in extracted_command:
-            extracted_command = extracted_command.replace("song", "")
-            spotify.play_track(extracted_command)
-        elif 'album' in extracted_command:
-            extracted_command = extracted_command.replace("album", "")
-            spotify.play_album(extracted_command)
-        else:
-            # Default search for tracks
-            spotify.play_track(extracted_command)
-        print(f"Tried to handle extracted_command: {extracted_command}")
+    if 'play' in command_str_lower:
+        spotify_command = SpotifyCommand(command_str)
+        spotify_command.execute()

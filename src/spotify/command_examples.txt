@@ -1,0 +1,39 @@
+... Jarvis, play xyz (on/from/in/with) spotify  --> xyz
+... Jarvis, play xyz --> xyz
+
+xyz =
+
+# Tracks
+- the lazy song                                 -->     track search for "the lazy song"
+- song the lazy song                            -->     track search for "the lazy song"
+- the song the lazy song                        -->     track search for "the lazy song"
+- track the lazy song                           -->     track search for "the lazy song"
+- the awesome track the lazy song               -->     track search for "the lazy song"
+- the lazy song from Bruno Mars                 -->     track search for "the lazy song" from artist "Bruno Mars"
+- the great track the lazy song from Bruno Mars -->     track search for "the lazy song" from artist "Bruno Mars"
+- the great song the lazy song from Bruno Mars  -->     track search for "the lazy song" from artist "Bruno Mars"
+- some chilling music from Shakira              -->     track search for "chilling music" from artist "Shakira"
+
+
+
+# Albums
+- album El Dorado                               -->     album search for "El Dorado"
+- album El Dorado from Shakira                  -->     album search for "El Dorado" from artist "Shakira"
+
+# Artists
+- something from Adele                          -->     artist top ten tracks for "Adele"
+- some songs from Adele                         -->     artist top ten tracks for "Adele"
+- songs from Adele                              -->     artist top ten tracks for "Adele"
+- some music from Adele                         -->     artist top ten tracks for "Adele"
+- music from Adele                              -->     artist top ten tracks for "Adele"
+- artist Adele                                  -->     artist top ten tracks for "Adele"
+- the artist Adele                              -->     artist top ten tracks for "Adele"
+
+# Playlists
+- playlist rock music                           -->     playlist search for "rock music"
+- the playlist rock music                       -->     playlist search for "rock music"
+- a rock music playlist                         -->     playlist search for "rock music"
+- my rock music playlist                        -->     playlist search for "rock music"
+- the rock music playlist                       -->     playlist search for "the rock music" <-- watch out
+- some chilling music                           -->     playlist search for "chilling"
+- chilling music                                -->     playlist search for "chilling"
