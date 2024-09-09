@@ -1,7 +1,6 @@
 import numpy as np
 
 import src.vosk_model.config as config
-from src.spotify.commands import extract_spotify_command
 
 from src.spotify.SpotifyCommand import SpotifyCommand
 from src.vosk_model.speech_to_text import speech_to_text
