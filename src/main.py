@@ -5,8 +5,10 @@ from src.vosk_model.audio_callback import audio_callback
 from src.vosk_model.process_audio import continuous_processing
 
 if __name__ == "__main__":
+    test_command = "Jarvis, play waka waka from shakira"
+
     # Create and start the recording thread
-    recognition_thread = threading.Thread(target=continuous_processing)
+    recognition_thread = threading.Thread(target=continuous_processing, args=(test_command,))
     recognition_thread.daemon = True
     recognition_thread.start()
 

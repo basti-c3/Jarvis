@@ -9,7 +9,7 @@ from src.vosk_model.process_command import record_command
 from src.vosk_model.speech_to_text import recognizer
 
 
-def continuous_processing():
+def continuous_processing(test_command=None):
     """
         Continuously process audio data from the queue and perform speech recognition
         to detect if a command is coming in.
@@ -17,6 +17,9 @@ def continuous_processing():
     is_recording_command = False
     command_audio_buffer = np.array([], dtype=np.int16)
     command_pause_buffer = np.array([], dtype=np.int16)
+
+    if test_command:
+        is_recording_command = True
 
     while True:
         try:
@@ -27,7 +30,8 @@ def continuous_processing():
             else:
                 command_finished, command_audio_buffer, command_pause_buffer = record_command(command_audio_buffer,
                                                                                               command_pause_buffer,
-                                                                                              audio_chunk.flatten())
+                                                                                              audio_chunk.flatten(),
+                                                                                              test_command)
                 if command_finished:
                     # Reset buffers and command
                     is_recording_command = False

@@ -167,7 +167,7 @@ class SpotifyAPI:
     def get_top_tracks(self, artist_id):
         """Get the top tracks for an artist using their Spotify ID."""
         url = f"{self.base_url}/artists/{artist_id}/top-tracks"
-        return self.get_tracks_by_query(url)
+        return self.get_tracks_by_query(url, "tracks")
 
     def get_album_tracks(self, album_id):
         """Get all tracks for an album using its Spotify ID."""
@@ -179,7 +179,7 @@ class SpotifyAPI:
         url = f"{self.base_url}/playlists/{playlist_id}/tracks"
         return self.get_tracks_by_query(url)
 
-    def get_tracks_by_query(self, url):
+    def get_tracks_by_query(self, url, results_key='items'):
         headers = self.get_headers()
         params = {
             "market": "DE"  # Adjust market if needed
@@ -188,7 +188,7 @@ class SpotifyAPI:
 
         if response.status_code == 200:
             results = response.json()
-            tracks = results.get('items', [])  # Use 'items' for the list of tracks
+            tracks = results.get(results_key, [])  # Use 'items' for the list of tracks
             return tracks
         else:
             Warn(f"Failed to get tracks for url {url}: {response.status_code}")
@@ -313,12 +313,11 @@ class SpotifyAPI:
             return
 
         # Get the playlist tracks
-        playlist_tracks = self.get_playlist_tracks(playlist_id)
-        if not playlist_tracks:
+        playlist_items = self.get_playlist_tracks(playlist_id)
+        if not playlist_items:
             Warn(f"No playlist tracks found for playlist with ID {playlist_id}.")
             return
-
-        playlist_track_uris = [track['uri'] for track in playlist_tracks]
+        playlist_track_uris = [item['track']['uri'] for item in playlist_items if 'track' in item]
         self.play_track_uris(playlist_track_uris, shuffle=True)
 
     def search(self, query, types='track,artist,album,playlist', limit=10):
@@ -369,7 +368,7 @@ class SpotifyAPI:
     def search_album(self, album_name, artist_name=None):
         """Search for an album by name and return its Spotify ID."""
         if artist_name is not None:
-            query_str = f'artist:"{artist_name}" AND {album_name}'
+            query_str = f'artist:"{artist_name}" album:"{album_name}"'
         else:
             query_str = album_name
 
@@ -387,7 +386,7 @@ class SpotifyAPI:
     def search_playlist(self, playlist_name, artist_name=None):
         """Search for a playlist by name and return its Spotify ID."""
         if artist_name is not None:
-            query_str = f'artist:"{artist_name}" AND {playlist_name}'
+            query_str = f'artist:"{artist_name}" track:"{playlist_name}"'
             types = "track"  # When given artist_name as well ("some chilly music from Shakira"), search for tracks
         else:
             query_str = playlist_name
@@ -395,11 +394,11 @@ class SpotifyAPI:
 
         results = self.search(query_str, types=types)
         if results is not None:
-            items = results.get('playlist', {}).get('items', [])
+            items = results.get('playlists', {}).get('items', [])
             if items:
                 playlist_id = items[0]['id']
                 return playlist_id
             else:
-                print(f"No playlist found with the name '{playlist_name}'")
+                Warn(f"No playlist found with the name '{playlist_name}'")
                 return None
         return None
