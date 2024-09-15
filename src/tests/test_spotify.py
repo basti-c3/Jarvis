@@ -44,10 +44,12 @@ class TestSpotifyCommand(unittest.TestCase):
         spotify_command = SpotifyCommand("Play the amazing song The Lazy Song from Bruno Mars")
         self.assertEqual(spotify_command.type, 'track')
         self.assertEqual(spotify_command.search_str, 'the lazy song')
+        self.assertEqual(spotify_command.artist_str, 'bruno mars')
 
         spotify_command = SpotifyCommand("Play the great track The Lazy Song from Bruno Mars")
         self.assertEqual(spotify_command.type, 'track')
         self.assertEqual(spotify_command.search_str, 'the lazy song')
+        self.assertEqual(spotify_command.artist_str, 'bruno mars')
 
         spotify_command = SpotifyCommand("Play chilling music from Shakira")
         self.assertEqual(spotify_command.type, 'track')  # This should be a track search, not a playlist search

@@ -20,10 +20,6 @@ We welcome any and all contributions! Here are some ways you can get started:
 2. Implement speech detection fully
 
 
-
-
-
-
 [main.py](src/main.py)
 
 `git clone us bitch`

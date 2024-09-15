@@ -62,5 +62,5 @@ def update_env_file(token, token_name):
 
 
 if __name__ == "__main__":
-    authorization_code = "AQDFdiDV3G-Fa571RGn7IHQ4tBcSF8mNFb7lYOL8urfbmNMobspYMvmonhYdY91eOSZkjpd4dkRHfhl7MYzVu0oplYPJqatJBp5DyE80Rd6qBoY3tGtGsC3glr9eyxXf_DY_cgYG67x3wfW1K43UB29ExxMvEs_hTsgAdLaBIBoub7UadBNvo9qvwPzx_AcpPAL5u7ZRBVYDnXXG2DFYQpH1rDp5KrpnSCXsPgjnprcxeXbRtVkACA"
+    authorization_code = "abc"
     get_refresh_token_from_authorization(authorization_code)

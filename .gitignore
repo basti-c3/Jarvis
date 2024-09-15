@@ -5,3 +5,5 @@
 .env
 /models/*
 !/models/Readme.md
+TTS/
+/TTS/

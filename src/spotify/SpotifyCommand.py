@@ -67,6 +67,6 @@ class SpotifyCommand:
         elif self.type == "album":
             spotify.play_album(self.search_str, self.artist_str)
         elif self.type == "playlist":
-            spotify.play_playlist(self.search_str, self.artist_str)
+            spotify.play_playlist(self.search_str)
         else:
             raise Exception(f"Error in SpotifyCommand in execute: self.type = {self.type} is unknown!")

@@ -1,16 +1,13 @@
 import numpy as np
 
 import src.vosk_model.config as config
-from src.spotify.commands import extract_spotify_command
 
 from src.spotify.SpotifyCommand import SpotifyCommand
 from src.vosk_model.speech_to_text import speech_to_text
 
 
-def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chunk: np.array):
-    print("Audio buffer shape:", audio_buffer.shape)
-    print("New audio chunk shape:", new_audio_chunk.shape)
-
+def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chunk: np.array, test_command=None):
+    print("Recording command...")
     audio_buffer = np.concatenate((audio_buffer, new_audio_chunk))
     pause_buffer = np.concatenate((pause_buffer, new_audio_chunk))
 
@@ -29,7 +26,7 @@ def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chu
             print("Detected pause in speech. Ending command capture...")
         else:
             print(f"Maximum command length of {config.MAX_COMMAND_LENGTH} was reached. Ending command capture...")
-        command_str = get_command_text(audio_buffer)
+        command_str = get_command_text(audio_buffer) if test_command is None else test_command
         process_command(command_str)  # Process command
         return True, audio_buffer, pause_buffer
     return False, audio_buffer, pause_buffer
