@@ -61,7 +61,7 @@ def transform_files(input_path, output_path):
             filename = new_filename
             file_path = new_file_path
 
-        if filename.endswith('.wav'):
+        if filename.endswith(('.wav', '.flac')):
             y, sr = librosa.load(file_path, sr=16000)
 
             # trim silence
@@ -71,52 +71,42 @@ def transform_files(input_path, output_path):
             normalized_audio = librosa.util.normalize(trimmed_audio)
 
             output_file_path = os.path.join(output_path, filename)
-            sf.write(output_file_path, normalized_audio, int(sr), subtype="PCM_16")
+            sf.write(output_file_path, normalized_audio, int(sr), subtype="PCM_16")  # wav
+            to_flac(filename, output_path)  # flac
+            print(f"Finished file \"{os.path.join(output_path, filename)}\"")
 
 
-def to_flac():  # needed by vctk training process instead of wav files
+
+def to_flac(filename, directory):  # needed by vctk training process instead of wav files
     import os
     import re
     from pydub import AudioSegment
+    if filename.endswith(".wav") and re.match(r'audio_\d+', filename):
+        # Extract the number from the filename using regex
+        number = re.findall(r'\d+', filename)[0]
 
-    # Path to the directory containing the wav files
-    directory = "Basti_audio/wav48_silence_trimmed/basti"
+        # Pad the number with leading zeros to make it 3 digits
+        new_number = number.zfill(3)
 
-    # Loop through each file in the directory
-    for filename in os.listdir(directory):
-        # Check if the file is a .wav file and matches the 'audio_x' pattern
-        if filename.endswith(".wav") and re.match(r'audio_\d+', filename):
-            # Extract the number from the filename using regex
-            number = re.findall(r'\d+', filename)[0]
+        # Create the new filename in the format 'basti_xxx.flac'
+        new_filename = f"basti_{new_number}_mic1.flac"
 
-            # Pad the number with leading zeros to make it 3 digits
-            new_number = number.zfill(3)
+        # Build full file paths
+        old_file_path = os.path.join(directory, filename)
+        new_file_path = os.path.join(directory, new_filename)
 
-            # Create the new filename in the format 'basti_xxx.flac'
-            new_filename = f"basti_{new_number}_mic1.flac"
+        # Load the .wav file and convert it to .flac using pydub
+        audio = AudioSegment.from_wav(old_file_path)
+        audio.export(new_file_path, format="flac")
 
-            # Build full file paths
-            old_file_path = os.path.join(directory, filename)
-            new_file_path = os.path.join(directory, new_filename)
-
-            # Load the .wav file and convert it to .flac using pydub
-            audio = AudioSegment.from_wav(old_file_path)
-            audio.export(new_file_path, format="flac")
-
-            # Optionally, delete the original .wav file after conversion
-            os.remove(old_file_path)
-
-            print(f"Converted and renamed {filename} to {new_filename}")
-
-    print("All files have been converted and renamed successfully!")
+        # Optionally, delete the original .wav file after conversion
+        os.remove(old_file_path)
 
 
 if __name__ == "__main__":
     # transforms all ogg or wav files of the given input_path into wav files of 16000 sample rate to output_path
-    input_path = "C:\\Users\\basti\\Documents\\Jarvis\\data\\voice_conversion\\Basti\\training\\original_audio"
-    intermediate_path = "C:\\Users\\basti\\Documents\\Jarvis\\data\\voice_conversion\\Basti\\training\\intermediate_audio"
-    output_path = "C:\\Users\\basti\\Documents\\Jarvis\\data\\voice_conversion\\Basti\\training\\wavs"
+    input_path = "C:/Users/basti/Documents/Jarvis/src/text_to_speech/Basti_audio/wav48_silence_trimmed/basti"
+    output_path = "C:/Users/basti/Documents/Jarvis/src/text_to_speech/Basti_audio/wav48_silence_trimmed/basti/test"
 
-    transform_files(input_path, intermediate_path)
-    update_metadata(intermediate_path, output_path)
+    transform_files(input_path, output_path)
     print("All .wav files have been processed and saved to the output folder.")
