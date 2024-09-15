@@ -3,18 +3,18 @@ import os
 from TTS.api import TTS
 
 
-def speak_with_female_full_model(text="Example text"):
+def speak_with_female_full_model(text="Example text", output_path="speech_output_samples/original_output.wav"):
     # Vits model storage place
     model_orig_path = "C:/Users/basti/AppData/Local/tts/tts_models--en--vctk--vits/model_file.pth"
     config_orig_path = "C:/Users/basti/AppData/Local/tts/tts_models--en--vctk--vits/config.json"
 
     # Initialize TTS
     tts = TTS(model_path=model_orig_path, config_path=config_orig_path, strict=False).to("cuda")
-    tts.tts_to_file(text, speaker="p225", file_path="original_output.wav")
+    tts.tts_to_file(text, speaker="p225", file_path=output_path)
     print("Successfully!")
 
 
-def speak_with_trained_model(text, directory, model_filename="best_model", output_path="output.wav"):
+def speak_with_trained_model(text, directory, model_filename="best_model", output_path="speech_output_samples/output.wav"):
     model_path = os.path.join(directory, f"{model_filename}.pth")
     config_path = os.path.join(directory, f"config.json")
 
@@ -24,7 +24,7 @@ def speak_with_trained_model(text, directory, model_filename="best_model", outpu
     print("Successfully!")
 
 
-def speak_with_quick_voice_cloner(text, speaker_wav_path, output_path="output.wav", language="en"):
+def speak_with_quick_voice_cloner(text, speaker_wav_path, output_path="speech_output_samples/output.wav", language="en"):
     model_name = "tts_models/multilingual/multi-dataset/xtts_v2"
 
     tts = TTS(model_name=model_name).to("cuda")
