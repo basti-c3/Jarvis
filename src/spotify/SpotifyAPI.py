@@ -215,22 +215,6 @@ class SpotifyAPI:
                 pass
             return None
 
-    def transfer_playback(self):
-        """Transfer playback to a specific device."""
-        url = f"{self.base_url}/me/player"
-        headers = self.get_headers()
-        data = {
-            "device_ids": [self.device_id],
-            "play": True
-        }
-
-        response = requests.put(url, headers=headers, json=data)
-
-        if response.status_code == 204:
-            print(f"Playback transferred to device ID: {self.device_id}")
-        else:
-            Warn(f"Spotify: Failed to transfer playback, status: {response.status_code}, {response.json()}")
-
     def play_track_uris(self, track_uris, shuffle=True):
         """Play a list of track URIs on a specific device."""
         url = f"{self.base_url}/me/player/play"
@@ -283,6 +267,7 @@ class SpotifyAPI:
         else:
             query_str = track_name
         track = self.search_track(query_str)
+        print("0y", track)
         if not track:
             Warn(f"Cannot play song: '{track_name}' not found.")
             return

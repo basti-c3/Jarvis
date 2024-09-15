@@ -1,3 +1,4 @@
+import os
 import wave
 
 from pydub import AudioSegment
@@ -26,4 +27,12 @@ def convert_to_wav(audio_file_path, wav_path, type="mp3"):
 
 mp3_file_path = "../music_text.ogg"
 wav_file_path = "../data/audiofiles/music_text.wav"
-convert_to_wav(mp3_file_path, wav_file_path, "ogg")
+#convert_to_wav(mp3_file_path, wav_file_path, "ogg")
+
+direcory_path = "../../data/voice_conversion/Sebastian"
+for file in os.listdir(direcory_path):
+    if 'ogg' in file:
+        file_path = os.path.join(direcory_path, file)
+        out_file_path = os.path.join(direcory_path, file.split('.')[0] + '.wav')
+        convert_to_wav(file_path, out_file_path, "ogg")
+        os.remove(file_path)
