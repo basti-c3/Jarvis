@@ -5,9 +5,9 @@ from src.text_to_speech.tts_utils import tts_from_saved_model, speak_with_quick_
 
 if __name__ == "__main__":
     desired_sample_rate = 22050
-    speaker_wav_path = "../../data/voice_conversion/Jarvis/jarvis.wav"
-    data_dir_path = "../../../data/voice_conversion/Jarvis"
-    model_dir_path = "../../../data/voice_conversion/Jarvis/jarvis_voice_model-June-16-2025_03+17PM-1e4d37b"
+    speaker_wav_path = "../../data/voice_cloning/Jarvis/jarvis.wav"
+    data_dir_path = "../../../data/voice_cloning/Jarvis"
+    model_dir_path = "../../../data/voice_cloning/Jarvis/jarvis_voice_model-June-16-2025_03+17PM-1e4d37b"
     output_text = "Now listen. This is a test, and I do not want you to freak out."
 
     # Options what to do
