@@ -1,5 +1,4 @@
 # Settings for the vosk input
-import pyaudio
 from vosk import SetLogLevel
 
 BUFFER_DURATION = 0.5  # Duration of each buffer in seconds
