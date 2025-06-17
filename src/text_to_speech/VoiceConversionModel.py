@@ -23,12 +23,14 @@ class VoiceConversionModel:
             batch_group_size=1,
             num_loader_workers=8,
             learning_rate=5e-5,  # For fine-tuning lower learning rate required
+            epoch_output_wav_interval=5,
     ):
         self.pretrained_checkpoint_path = checkpoint_path
         self.checkpoint_config_path = config_path
 
         self.eval_split_max_size = eval_split_max_size
         self.sample_rate = sample_rate_of_test_data
+        self.epoch_output_wav_interval = epoch_output_wav_interval
 
         self.num_loader_workers = num_loader_workers
         self.batch_size = batch_size
@@ -79,10 +81,9 @@ class VoiceConversionModel:
 
     def after_epoch(self, trainer: Trainer):
         epoch_idx = trainer.epochs_done
-        print(f"Called after_epoch with epoch_idx: {epoch_idx}")
-        if epoch_idx % 5 == 0:  # change 10 to your desired interval
+        if epoch_idx % self.epoch_output_wav_interval == 0:
             print(f"Running TTS output at epoch {epoch_idx}")
-            self.tts(out_filename=f"tts_output_{epoch_idx}.wav")
+            self.text_to_speech(out_filename=f"tts_output_{epoch_idx}.wav")
 
     def fine_tune(self, epochs=100):
         if self.clone_dir_path is None:
@@ -104,13 +105,13 @@ class VoiceConversionModel:
         config.output_path = self.clone_dir_path
         config.run_name = f"{os.path.basename(self.clone_dir_path)}_voice_model"
         config.batch_size = self.batch_size
-        config.eval_batch_size = self.eval_batch_size,
-        config.batch_group_size = self.batch_group_size,
+        config.eval_batch_size = self.eval_batch_size
+        config.batch_group_size = self.batch_group_size
         config.eval_split_max_size = self.eval_split_max_size
         config["lr_gen"] = self.learning_rate
         config["lr_disc"] = self.learning_rate
-        config.num_loader_workers = self.num_loader_workers,
-        config.num_eval_loader_workers = int(self.num_loader_workers / 2),  # reduces memory, eval isn't as often
+        config.num_loader_workers = self.num_loader_workers
+        config.num_eval_loader_workers = int(self.num_loader_workers / 2)  # reduces memory, eval isn't as often
         config.run_eval = True
         config.test_delay_epochs = -1
         config.epochs = epochs  # Number of epochs, for fine tuning not as big as for training from scratch
@@ -166,7 +167,7 @@ class VoiceConversionModel:
             raise FileNotFoundError(f"Either model or config path dont exist: {model_path}, {config_path}")
 
         tts = TTS(model_path=model_path, config_path=config_path).to("cuda")
-        out_file_path = os.path.join(self.model_dir_path, out_filename) if output_path is None else output_path
+        out_file_path = os.path.join(self.model_dir_path, out_filename + '.wav') if output_path is None else output_path
         tts.tts_to_file(text, file_path=out_file_path, **kwargs)
 
         print(f"Successfully created output {out_filename}!")

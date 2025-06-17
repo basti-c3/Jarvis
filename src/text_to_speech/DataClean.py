@@ -15,19 +15,23 @@ class DataClean:
     def __init__(self, dir_path, required_sample_rate=22050, whisper_model="base", reduce_noise=False):
         self.transcribe_model = whisper.load_model(whisper_model)
         self.input_path = os.path.join(dir_path, RAW_DATA_DIR_NAME)
-        self.output_path = os.path.join(dir_path, CLEAN_DATA_DIR_NAME, 'wavs')
+        self.output_path = os.path.join(dir_path, CLEAN_DATA_DIR_NAME)
+        self.output_wavs_path = os.path.join(self.output_path, "wavs")
+
         self.required_sample_rate = required_sample_rate
         self.reduce_noise = reduce_noise
 
     def run(self):
         self.rename_wavs_sequentially()
         self.preprocess_audios()
+        self.review_audio_files()
         self.create_metadata()
 
     def rename_wavs_sequentially(self):
+        if not os.path.exists(self.input_path):
+            raise FileNotFoundError(f"Input path {self.input_path} does not exist")
         # Get all .wav files
         wav_files = [f for f in os.listdir(self.input_path) if f.lower().endswith('.wav')]
-        print("path: ", os.path.abspath(self.input_path))
         # First pass: Rename all files to temporary names to avoid conflicts
         temp_files = []
         for i, filename in enumerate(wav_files):
@@ -46,6 +50,10 @@ class DataClean:
         print(f"Renamed {len(wav_files)} files.")
 
     def preprocess_audios(self):
+        if not os.path.exists(self.input_path):
+            raise FileNotFoundError(f"Input path {self.input_path} does not exist")
+
+        os.makedirs(self.output_wavs_path, exist_ok=True)
         # Get only .wav files and count how many there are
         wav_files = [f for f in os.listdir(self.input_path) if f.lower().endswith('.wav')]
         total = len(wav_files)
@@ -62,7 +70,7 @@ class DataClean:
 
     def clean_audio(self, filename):
         file_input_path = os.path.join(self.input_path, filename)
-        file_output_path = os.path.join(self.output_path, filename)
+        file_output_path = os.path.join(self.output_wavs_path, filename)
 
         audio_sample, sample_rate = librosa.load(file_input_path, sr=None)
 
@@ -109,7 +117,7 @@ class DataClean:
 
         # Save transcript next to the audio file
         filename_without_extension = "".join(filename.split('.')[:-1])
-        transcript_path = os.path.join(self.output_path, filename_without_extension + '.txt')
+        transcript_path = os.path.join(self.output_wavs_path, filename_without_extension + '.txt')
 
         with open(transcript_path, "w", encoding="utf-8") as f:
             f.write(transcript)
@@ -136,11 +144,11 @@ class DataClean:
             with open(txt_path, "w", encoding="utf-8") as f:
                 f.write(transcript.strip())
 
-        wav_files = [f for f in os.listdir(self.output_path) if f.endswith(".wav")]
+        wav_files = [f for f in os.listdir(self.output_wavs_path) if f.endswith(".wav")]
         wav_files.sort()
 
         for wav_file in wav_files:
-            wav_path = os.path.join(self.output_path, wav_file)
+            wav_path = os.path.join(self.output_wavs_path, wav_file)
             txt_path = os.path.splitext(wav_path)[0] + ".txt"
 
             print("\n----------------------------------")
@@ -171,11 +179,14 @@ class DataClean:
                     updated = True
 
     def create_metadata(self, output_file="metadata.csv"):
+        if not os.path.exists(self.output_path):
+            raise FileNotFoundError(f"Cannot create metadata file, output_path {self.output_path} does not exist")
+
         entries = []
-        for file in os.listdir(self.output_path):
+        for file in os.listdir(self.output_wavs_path):
             if file.endswith(".wav"):
                 base = os.path.splitext(file)[0]
-                txt_path = os.path.join(self.output_path, f"{base}.txt")
+                txt_path = os.path.join(self.output_wavs_path, f"{base}.txt")
                 if os.path.exists(txt_path):
                     with open(txt_path, "r", encoding="utf-8") as f:
                         text = f.read().strip()
