@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     # Options what to do
     clean_data_and_review_data = False
-    train_model = False
+    train_model = True
     recalculate_phonemes = False
     create_audio_output = True
     create_vctk_vits_audio_output = False
