@@ -36,5 +36,6 @@ git clone https://github.com/coqui-ai/TTS.git
 cd TTS
 pip install -r requirements.txt
 pip install -e .
+cd ..
 # put <path to jarvis>\TTS into Umgebungsvariable PYTHONPATH
 # Look to the start of this file for common error ---1--- and apply it to the corresponding TTS file
