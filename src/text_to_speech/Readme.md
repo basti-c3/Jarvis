@@ -18,7 +18,10 @@ def is_multi_lingual(self):
 # ---------------2---------------
 # Missing key(s) in state_dict: "disc.nets.0.convs.0.bias" --> introduce strict parameter that goes through the
 # functions with value false until just before the place where the error happens (load_checkpoint, see traceback)
-
+# ---------------3---------------
+# Missing key(s) in state_dict: "disc.nets.0.convs.0.bias", ...
+# This is, because some discriminator weights are expected. Introduce keyword parameter strict=True (default) until
+# load_state_dict() uses this value and give it from your code as strict=False to the first TTS entry point, e.g. TTS()
 
 # How to setup everything? 
 You need nvidia graphic card with cu118 support for this setup. How to check this? Run in terminal:

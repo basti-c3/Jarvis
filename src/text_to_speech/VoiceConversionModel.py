@@ -159,14 +159,16 @@ class VoiceConversionModel:
         self.model_dir_path = model_dir_path if model_dir_path is not None else self.model_dir_path
         if self.model_dir_path is None:
             raise ValueError("Please provide the model_dir_path")
-
-        model_path = os.path.join(self.model_dir_path, f"{model_filename}.pth")
+        if kwargs.pop('disable_adding_model_name', None):
+            model_path = self.model_dir_path
+        else:
+            model_path = os.path.join(self.model_dir_path, f"{model_filename}.pth")
         config_path = os.path.join(self.model_dir_path, f"config.json")
 
         if not os.path.exists(model_path) or not os.path.exists(config_path):
             raise FileNotFoundError(f"Either model or config path dont exist: {model_path}, {config_path}")
 
-        tts = TTS(model_path=model_path, config_path=config_path).to("cuda")
+        tts = TTS(model_path=model_path, config_path=config_path, strict=False).to("cuda")
         out_file_path = os.path.join(self.model_dir_path, out_filename + '.wav') if output_path is None else output_path
         tts.tts_to_file(text, file_path=out_file_path, **kwargs)
 
