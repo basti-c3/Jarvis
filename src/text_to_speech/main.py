@@ -1,23 +1,28 @@
 from src.text_to_speech.DataClean import DataClean
 from src.text_to_speech.VoiceConversionModel import VoiceConversionModel
+from src.text_to_speech.tts_utils import create_new_speaker
 from src.text_to_speech.tts_utils import speak_with_quick_voice_cloner, tts_from_existing_model
 
 if __name__ == "__main__":
     desired_sample_rate = 22050
+    speaker_name = "jarvis_avg"
     base_path = "C:/Users/basti/AppData/Local/tts/"
-    speaker_wav_path = "../../data/voice_cloning/Jarvis/jarvis.wav"
+    speaker_wav_path = "../../data/voice_cloning/Jarvis/jarvis.wav"  #
+    voice_dir_path = "../../data/voice_cloning/Basti/training/wavs"
     data_dir_path = "../../data/voice_cloning/Jarvis"
     model_dir_path = "../../data/voice_cloning/Jarvis/Jarvis_voice_model-June-17-2025_02+01AM-ea812f1"
-    output_text = "Now listen. This is a test, and I do not want you to freak out."
-    output_path = "../../data/voice_cloning/lj_test_audio_output.wav"
+    language = "en"
+    output_text = "Play hard, work less. This is America."
+    output_path = "../../data/voice_cloning/jarvis_avg_test_reihe2_test_audio_output.wav"
 
     # Options what to do
     clean_data_and_review_data = False
-    train_model = True
+    train_model = False
     recalculate_phonemes = False
     create_audio_output = False
     create_vctk_vits_audio_output = False
-    quick_xtts_audio_output = False
+    quick_xtts_audio_output = True
+    create_new_speaker_id = False
 
     epoch_output_wav_interval = 1
 
@@ -39,4 +44,9 @@ if __name__ == "__main__":
         tts_from_existing_model("lj", base_path, text=output_text, output_path=output_path)
 
     if quick_xtts_audio_output:
-        speak_with_quick_voice_cloner(speaker_wav_path, output_path=output_path, text=output_text)
+        speak_with_quick_voice_cloner(speaker_name=speaker_name, output_path=output_path, text=output_text,
+                                      language=language)
+        print(f"wav output saved to {output_path}")
+
+    if create_new_speaker_id:
+        create_new_speaker(speaker_name, voice_dir_path, False)  # or as wav_dir_path: [speaker_wav_path]

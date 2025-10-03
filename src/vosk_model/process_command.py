@@ -55,3 +55,4 @@ def process_command(command_str):
     if 'play' in command_str_lower:
         spotify_command = SpotifyCommand(command_str)
         spotify_command.execute()
+

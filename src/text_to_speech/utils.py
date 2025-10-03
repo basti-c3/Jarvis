@@ -3,5 +3,6 @@ RAW_DATA_DIR_NAME = 'raw_test_data'
 CLEAN_DATA_DIR_NAME = 'cleaned_test_data'
 VITS_MODEL_PATH = "C:/Users/basti/AppData/Local/tts/tts_models--en--ljspeech--vits/model_file.pth"
 VITS_CONFIG_PATH = "C:/Users/basti/AppData/Local/tts/tts_models--en--ljspeech--vits/config.json"
+XTTS_MODEL_PATH = "tts_models/multilingual/multi-dataset/xtts_v2"
 
 DEFAULT_OUT_TEXT = "This is a generic text to be translated by this amazing new voice for testing purposes."
