@@ -1,9 +1,15 @@
 **/__pycache__/**
 *.pyc
 .idea/
-/.env
 .env
+# Ignore models but keep the readme
 /models/*
 !/models/Readme.md
+
+# Ignore data but keep the readme
+/data/*
+!/data/Readme.md
+
+# Ignore TTS data and images
 /TTS/tests/data/*
 /TTS/images/*

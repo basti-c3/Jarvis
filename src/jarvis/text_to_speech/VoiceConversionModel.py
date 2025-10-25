@@ -8,7 +8,7 @@ from TTS.tts.datasets import load_tts_samples
 from TTS.tts.models.vits import Vits, VitsAudioConfig
 from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
-from src.text_to_speech.utils import *
+from paths import METADATA_FILENAME, CLEAN_DATA_DIR_NAME, VITS_MODEL_PATH, VITS_CONFIG_PATH, DEFAULT_OUT_TEXT
 
 
 class VoiceConversionModel:

@@ -1,4 +1,4 @@
-from src.global_init import audio_queue
+from global_init import audio_queue
 
 
 def audio_callback(indata, frames, time, status):

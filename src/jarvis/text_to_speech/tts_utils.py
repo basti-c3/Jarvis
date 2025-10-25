@@ -6,8 +6,8 @@ from TTS.tts.models.xtts import XttsAudioConfig, XttsArgs, Xtts
 from TTS.config.shared_configs import BaseDatasetConfig
 
 from TTS.api import TTS
-from src.text_to_speech.VoiceConversionModel import VoiceConversionModel
-from src.text_to_speech.utils import DEFAULT_OUT_TEXT, XTTS_MODEL_PATH
+from text_to_speech.VoiceConversionModel import VoiceConversionModel
+from paths import XTTS_MODEL_PATH, DEFAULT_OUT_TEXT
 
 
 def tts_from_existing_model(model: str, base_path, text=DEFAULT_OUT_TEXT, output_path=None, speaker="p225"):

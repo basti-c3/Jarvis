@@ -1,20 +1,11 @@
-import os
 from datetime import datetime
-
-from vosk import Model, KaldiRecognizer
 import numpy as np
-
-import src.vosk_model.config as config
 import json
 
-model_path = "../models/vosk-model-small-en-us-0.15"
-if not os.path.exists(model_path):
-    raise Exception(f"Error: No model at path {os.path.abspath(model_path)}")
-model = Model(model_path)
-recognizer = KaldiRecognizer(model, config.AUDIO_RATE)
+from global_init import stt_model
 
 
-def speech_to_text(audio: np.array, model_type="en"):
+def turn_speech_to_text(audio: np.array):
     # Ensure the vosk buffer is in the correct format (16kHz, mono, PCM 16-bit)
     start = datetime.now()
     if isinstance(audio, np.ndarray):
@@ -27,10 +18,10 @@ def speech_to_text(audio: np.array, model_type="en"):
         # Ensure the buffer is the right type (16-bit PCM)
         raise Exception(f"Error in speech_to_text: Convert audio to right type before processing! Got {type(audio)}")
 
-    if recognizer.AcceptWaveform(audio_bytes):
-        result = recognizer.Result()
+    if stt_model.recognizer.AcceptWaveform(audio_bytes):
+        result = stt_model.recognizer.Result()
     else:
-        result = recognizer.FinalResult()
+        result = stt_model.recognizer.FinalResult()
 
     # Parse the result
     result_dict = json.loads(result)

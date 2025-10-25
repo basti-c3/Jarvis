@@ -1,0 +1,1 @@
+In this folder all data is stored that is required for training

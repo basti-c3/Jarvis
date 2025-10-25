@@ -4,8 +4,8 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from src.utils import spotify_redirect_url, spotify_token_url
-from src.utils import Warn
+from paths import spotify_token_url, spotify_redirect_url
+from utils import Warn
 
 
 def get_refresh_token_from_authorization(authorization_code):
@@ -41,7 +41,7 @@ def get_refresh_token_from_authorization(authorization_code):
 
 def update_env_file(token, token_name):
     # Path to your .env file
-    env_file = '../../.env'
+    env_file = '../../../.env'
 
     # Load existing environment variables
     env_vars = {}

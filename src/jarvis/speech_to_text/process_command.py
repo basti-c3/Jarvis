@@ -1,9 +1,9 @@
 import numpy as np
 
-import src.vosk_model.config as config
+import speech_to_text.config as config
 
-from src.spotify.SpotifyCommand import SpotifyCommand
-from src.vosk_model.speech_to_text import speech_to_text
+from spotify.SpotifyCommand import SpotifyCommand
+from speech_to_text.turn_speech_to_text import turn_speech_to_text
 
 
 def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chunk: np.array, test_command=None):
@@ -33,7 +33,7 @@ def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chu
 
 
 def get_command_text(audio):
-    result_command = speech_to_text(audio)
+    result_command = turn_speech_to_text(audio)
     print("--------------------------------------------------------")
     print(f"Recognized Command: {result_command}")
 

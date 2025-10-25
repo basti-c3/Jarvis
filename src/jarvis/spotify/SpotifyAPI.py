@@ -7,9 +7,8 @@ import requests
 import base64
 from dotenv import load_dotenv
 
-from src.utils import spotify_base_url, spotify_token_url, spotify_auth_url, \
-    spotify_redirect_url
-from src.utils import Warn
+from paths import spotify_base_url, spotify_token_url, spotify_redirect_url, spotify_auth_url, SPOTIFY_TOKEN_DIR_PATH
+from utils import *
 
 
 class SpotifyAPI:
@@ -17,9 +16,9 @@ class SpotifyAPI:
         self.base_url = spotify_base_url
         self.token_url = spotify_token_url
         self.redirect_url = spotify_redirect_url
-        self.token_dir_path = "../tokens/spotify"
-        if not os.path.exists(self.token_dir_path):
-            Warn(f"Error: path does not exist: {os.path.abspath(self.token_dir_path)}")
+        self.token_dir_path = SPOTIFY_TOKEN_DIR_PATH
+        if not os.path.exists(self.token_dir_path) or len(os.listdir(self.token_dir_path)) == 0:
+            Warn(f"Error: spotify token path does not exist: {os.path.abspath(self.token_dir_path)}")
         self.token_date_format = "%Y-%m-%d_%H-%M-%S"
 
         # Load environment variables from .env file

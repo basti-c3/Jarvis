@@ -3,10 +3,9 @@ import traceback
 
 import numpy as np
 
-import src.vosk_model.config as config
-from src.global_init import audio_queue
-from src.vosk_model.process_command import record_command
-from src.vosk_model.speech_to_text import recognizer
+import speech_to_text.config as config
+from global_init import audio_queue, stt_model
+from speech_to_text.process_command import record_command
 
 
 def continuous_processing(test_command=None):
@@ -45,6 +44,7 @@ def continuous_processing(test_command=None):
 
 
 def keyword_detected(audio_bytes):
+    recognizer = stt_model.recognizer
     if recognizer.AcceptWaveform(audio_bytes):
         result = recognizer.Result()
         print(f"Result: {result}")

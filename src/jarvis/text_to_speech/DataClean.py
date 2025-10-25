@@ -8,7 +8,7 @@ import simpleaudio as sa
 import librosa
 from pydub import AudioSegment
 
-from src.text_to_speech.utils import RAW_DATA_DIR_NAME, CLEAN_DATA_DIR_NAME
+from paths import RAW_DATA_DIR_NAME, CLEAN_DATA_DIR_NAME
 
 
 class DataClean:

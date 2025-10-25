@@ -4,9 +4,3 @@ def Warn(message, *args):
         print("\033[91m" + message + " " + str(args) + "\033[0m")
     else:
         print("\033[91m" + message + "\033[0m")
-
-
-spotify_base_url = "https://api.spotify.com/v1"
-spotify_token_url = "https://accounts.spotify.com/api/token"
-spotify_redirect_url = 'http://localhost:3000/callback'
-spotify_auth_url = 'https://accounts.spotify.com/authorize'

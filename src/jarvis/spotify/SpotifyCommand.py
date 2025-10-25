@@ -1,8 +1,9 @@
-from src.spotify.utils import *
+from spotify.spotify_utils import *
 
 
 class SpotifyCommand:
     def __init__(self, command_str):
+        self.artist_split_words = ['by', 'from']
         self.command_str = command_str.lower()
         self.type = None  # Is set in the extract method
         self.search_str = None  # Is set in the extract method
@@ -12,8 +13,8 @@ class SpotifyCommand:
     def extract(self):
         search_str = preprocess_spotify_search_string(self.command_str)  # For example "hello from adele"
 
-        if ' from ' in search_str:  # 'from spotify' would be removed already
-            search_str, artist_str = extract_artist_from_search_string(search_str)
+        if any(word in search_str for word in self.artist_split_words):  # 'from spotify' would be removed already
+            search_str, artist_str = extract_artist_from_search_string(search_str, self.artist_split_words)
             # "hello from adele" --> ["hello", "adele"]
             self.search_str = search_str
             self.artist_str = artist_str
@@ -54,7 +55,7 @@ class SpotifyCommand:
         self.search_str = normalize_whitespacing(search_str)  # To remove possible double spaces
 
     def execute(self):
-        from src.global_init import spotify  # Import in here only, so the test files can execute without connecting
+        from global_init import spotify  # Import in here only, so the test files can execute without connecting
         # a device which is done when importing from src.global_init
 
         if self.search_str is None:

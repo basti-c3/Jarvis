@@ -26,19 +26,27 @@ def preprocess_spotify_search_string(command_str):
     return extracted_command
 
 
-def extract_artist_from_search_string(search_str):
+def extract_artist_from_search_string(search_str: str, split_words: list[str]):
     """
         Input:  "hello from adele" / "the lazy song from bruno mars"
         Output: --> ("hello", "adele") / ("the lazy song", "bruno mars")
     """
-    split_word = ' from '  # Including the blanks
-    if search_str.count(split_word) >= 1:
-        # Split only once from the right (also if multiple 'from')
-        [track_str, artist_str] = search_str.rsplit(split_word, 1)
-        return track_str, artist_str
-    else:
-        # If no from in search_string no splitting
-        return search_str
+    white_spaced_split_words = [f' {word.strip()} ' for word in split_words]
+    # Find the rightmost occurrence of any split word
+    last_pos = -1
+    latest_split_word = None
+    for word in split_words:
+        pos = search_str.rfind(word)
+        if pos > last_pos:
+            last_pos = pos
+            latest_split_word = word
+
+    if latest_split_word is not None and last_pos != -1:
+        track_str, artist_str = search_str.rsplit(latest_split_word, 1)
+        return track_str.strip(), artist_str.strip()
+
+    # If no known split word found
+    return search_str.strip(), None
 
 
 def normalize_whitespacing(search_str):

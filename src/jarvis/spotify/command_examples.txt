@@ -1,5 +1,6 @@
 ... Jarvis, play xyz (on/from/in/with) spotify  --> xyz
 ... Jarvis, play xyz --> xyz
+... Jarvis, play xyz by/from abc --> track: xyz, artist abc
 
 xyz =
 
