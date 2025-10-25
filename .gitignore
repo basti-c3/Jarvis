@@ -5,5 +5,5 @@
 .env
 /models/*
 !/models/Readme.md
-TTS/
-/TTS/
+/TTS/tests/data/*
+/TTS/images/*
