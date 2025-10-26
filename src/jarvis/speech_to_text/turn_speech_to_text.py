@@ -2,7 +2,7 @@ from datetime import datetime
 import numpy as np
 import json
 
-from global_init import stt_model
+from global_init import get_stt_recognizer
 
 
 def turn_speech_to_text(audio: np.array):
@@ -18,10 +18,11 @@ def turn_speech_to_text(audio: np.array):
         # Ensure the buffer is the right type (16-bit PCM)
         raise Exception(f"Error in speech_to_text: Convert audio to right type before processing! Got {type(audio)}")
 
-    if stt_model.recognizer.AcceptWaveform(audio_bytes):
-        result = stt_model.recognizer.Result()
+    recognizer = get_stt_recognizer()
+    if recognizer.AcceptWaveform(audio_bytes):
+        result = recognizer.Result()
     else:
-        result = stt_model.recognizer.FinalResult()
+        result = recognizer.FinalResult()
 
     # Parse the result
     result_dict = json.loads(result)

@@ -1,4 +1,4 @@
-from global_init import audio_queue
+from global_init import get_audio_queue
 
 
 def audio_callback(indata, frames, time, status):
@@ -6,4 +6,5 @@ def audio_callback(indata, frames, time, status):
     if status:
         print(status, flush=True)
     # Convert vosk_model data to bytes and put it in the queue
+    audio_queue = get_audio_queue()
     audio_queue.put(indata.copy())

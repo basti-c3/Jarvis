@@ -10,6 +10,8 @@ RESOURCE_DIR: Path = BASE_DIR / "src" / "resources"
 SPOTIFY_TOKEN_DIR_PATH = str(RESOURCE_DIR / "spotify_tokens")
 STT_MODEL_PATH = str(BASE_DIR / "models" / "vosk-model-small-en-us-0.15")
 
+# Config
+env_config_path = lambda env: str(BASE_DIR / f"config/{env}-env.yml")
 
 # TTS
 METADATA_FILENAME = 'metadata.csv'

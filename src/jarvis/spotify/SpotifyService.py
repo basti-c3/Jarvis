@@ -11,7 +11,7 @@ from paths import spotify_base_url, spotify_token_url, spotify_redirect_url, spo
 from utils import *
 
 
-class SpotifyAPI:
+class SpotifyService:
     def __init__(self):
         self.base_url = spotify_base_url
         self.token_url = spotify_token_url

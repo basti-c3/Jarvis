@@ -1,3 +1,4 @@
+from global_init import get_spotify_service
 from spotify.spotify_utils import *
 
 
@@ -55,19 +56,18 @@ class SpotifyCommand:
         self.search_str = normalize_whitespacing(search_str)  # To remove possible double spaces
 
     def execute(self):
-        from global_init import spotify  # Import in here only, so the test files can execute without connecting
-        # a device which is done when importing from src.global_init
+        spotify_service = get_spotify_service()
 
         if self.search_str is None:
             raise Exception("Error in SpotifyCommand: search_str is None when executing!")
 
         if self.type == "track":
-            spotify.play_track(self.search_str, self.artist_str)
+            spotify_service.play_track(self.search_str, self.artist_str)
         elif self.type == "artist":
-            spotify.play_artist(self.search_str)
+            spotify_service.play_artist(self.search_str)
         elif self.type == "album":
-            spotify.play_album(self.search_str, self.artist_str)
+            spotify_service.play_album(self.search_str, self.artist_str)
         elif self.type == "playlist":
-            spotify.play_playlist(self.search_str)
+            spotify_service.play_playlist(self.search_str)
         else:
             raise Exception(f"Error in SpotifyCommand in execute: self.type = {self.type} is unknown!")

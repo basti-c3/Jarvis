@@ -4,7 +4,7 @@ import traceback
 import numpy as np
 
 import speech_to_text.config as config
-from global_init import audio_queue, stt_model
+from global_init import get_audio_queue, get_stt_recognizer
 from speech_to_text.process_command import record_command
 
 
@@ -23,6 +23,7 @@ def continuous_processing(test_command=None):
     while True:
         try:
             # Get audio data from the queue
+            audio_queue = get_audio_queue()
             audio_chunk = audio_queue.get(timeout=1)  # Get audio data from the queue
             if not is_recording_command:
                 is_recording_command = keyword_detected(audio_chunk.tobytes())
@@ -44,7 +45,7 @@ def continuous_processing(test_command=None):
 
 
 def keyword_detected(audio_bytes):
-    recognizer = stt_model.recognizer
+    recognizer = get_stt_recognizer()
     if recognizer.AcceptWaveform(audio_bytes):
         result = recognizer.Result()
         print(f"Result: {result}")
