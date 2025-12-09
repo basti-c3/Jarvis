@@ -59,7 +59,7 @@ class SpotifyCommand:
 
     def execute(self):
         if self.search_str is None:
-            jarvis.say("Sorry, I did not get that, can you repeat, please?.")
+            jarvis.say("Sorry Sir, I did not get that, would you mind repeating that, please?")
             raise Exception("Error in SpotifyCommand: search_str is None when executing!")
 
         if self.type == play_types.track:
@@ -71,5 +71,6 @@ class SpotifyCommand:
         elif self.type == play_types.playlist:
             self.spotify_service.play_playlist(self.search_str)
         else:
-            jarvis.say(f"Sorry, but I do not know how to play something called {self.type}.")
+            # jarvis.say(f"Sorry Sir, but I do not know how to play something called {self.type}.")
+            jarvis.say(f"Sorry Sir, but I did not understand what you want me to play.")
             raise Exception(f"Error in SpotifyCommand in execute: self.type = {self.type} is unknown!")

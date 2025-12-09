@@ -43,7 +43,7 @@ def continuous_processing(test_command=None):
                         return
                 except Exception as error:
                     Warn(str(error))
-                    jarvis.say("Sorry, something went wrong, please try again.")
+                    jarvis.say("Sorry Sir, but something went terribly wrong here, please try again.")
         except queue.Empty:
             continue  # Continue if the queue is empty
         except Exception as e:

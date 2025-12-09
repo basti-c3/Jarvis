@@ -19,8 +19,8 @@ def init_globals():
         _audio_queue = queue.Queue()
     if _stt_model is None:
         _stt_model = JarvisSTT()
-    if _tts_model is None:
-        _tts_model = JarvisTTS()
+    #if _tts_model is None:
+    #    _tts_model = JarvisTTS()
 
 
 def get_audio_queue():
