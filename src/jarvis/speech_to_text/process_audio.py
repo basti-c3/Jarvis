@@ -40,7 +40,7 @@ def continuous_processing(test_command=None):
                         is_recording_command = False
                         command_audio_buffer = np.array([], dtype=np.int16)
                         command_pause_buffer = np.array([], dtype=np.int16)
-                        return
+
                 except Exception as error:
                     Warn(str(error))
                     jarvis.say("Sorry Sir, but something went terribly wrong here, please try again.")
