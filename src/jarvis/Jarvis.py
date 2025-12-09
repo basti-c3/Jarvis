@@ -26,7 +26,6 @@ class Jarvis:
 
     def say(self, text: str):
         # This is a preliminary solution where Jarvis can only say already processed things. Not for future use
-        print("GOT HERE")
         match text:
             case "This is a test phrase!":
                 play_audio("thisisatestphrase")
@@ -54,6 +53,25 @@ class Jarvis:
                 play_audio("sorrysirididnotgetthatwouldyoumindrepeatingthatplease")
             case "Sorry Sir, but something went terribly wrong here, please try again.":
                 play_audio("sorrysirbutsomethingwentterriblywrongherepleasetryagain")
-
+            case "Of course, Sir!":
+                play_audio("ofcoursesir")
+            case "Sorry, Sir. There was a problem finding the correct device where the music should be stopped.":
+                play_audio("sorrysirtherewasaproblemfindingthecorrectdevicewherethemusicshouldbestopped")
+            case "Most certainly, Sir! Enjoy!":
+                play_audio("mostcertainlysirenjoy")
+            case "Sorry, Sir. There was a problem finding the correct device where the music should be played.":
+                play_audio("sorrysirtherewasaproblemfindingthecorrectdevicewherethemusicshouldbeplayed")
+            case "Alright, skipping the song!":
+                play_audio("alrightskippingthesong")
+            case "Sorry, Sir. There was a problem finding the correct device where the music is supposed to be playing currently.":
+                play_audio("sorrysirtherewasaproblemfindingthecorrectdevicewherethemusicissupposedtobeplayingcurrently")
+            case "Alright, let's make an infinite loop of this song!":
+                play_audio("alrightletsmakeaninfiniteloopofthissong")
+            case "Turning repeat mode off again.":
+                play_audio("turningrepeatmodeoffagain")
+            case "Sorry, Sir. There was a problem finding the correct device where the repeat mode should be set.":
+                play_audio("sorrysirtherewasaproblemfindingthecorrectdevicewheretherepeatmodeshouldbeset")
+            case "Sorry, Sir. I encountered a problem executing the requested command to the Spotify API. The response was not as expected.":
+                play_audio("sorrysiriencounteredaproblemexecutingtherequestedcommandtothespotifyapitheresponsewasnotasexpected")
 
 jarvis = Jarvis()

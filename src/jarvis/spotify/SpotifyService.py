@@ -1,9 +1,11 @@
 from requests import Response
 
 from Jarvis import jarvis
-from spotify.PlayType import play_types
+from spotify.CommandTypes import PlayType
+from spotify.ResponseError import ResponseError
 from spotify.SpotifyApiCommunicationService import SpotifyApiCommunicationService
-from spotify.spotify_utils import raise_spotify_error
+from spotify.spotify_action import spotify_action
+from spotify.spotify_utils import raise_spotify_response_error
 from utils import *
 
 
@@ -32,7 +34,7 @@ class SpotifyService:
 
         # Playing tracks on specified device or default one
         top_tracks_uris = [track['uri'] for track in top_tracks]
-        self._play(top_tracks_uris, play_types.artist, artist_name, shuffle=True)
+        self._play(top_tracks_uris, PlayType.artist, artist_name, shuffle=True)
 
     def play_track(self, track_name, artist_name=None):
         """Play a song, optionally by a given artist."""
@@ -50,7 +52,7 @@ class SpotifyService:
             jarvis.say("Sorry Sir, but I could not find that song.")
             return
 
-        self._play([track['uri']], play_types.track, play_content_str, shuffle=False)
+        self._play([track['uri']], PlayType.track, play_content_str, shuffle=False)
 
     def play_album(self, album_name, artist_name=None):
         """Play an album."""
@@ -74,7 +76,7 @@ class SpotifyService:
 
         album_track_uris = [track['uri'] for track in album_tracks]
 
-        self._play(album_track_uris, play_types.album, play_content_str, shuffle=False)
+        self._play(album_track_uris, PlayType.album, play_content_str, shuffle=False)
 
     def play_playlist(self, playlist_name, artist_name=None):
         """Play a playlist, both your own or public ones possible."""
@@ -96,14 +98,30 @@ class SpotifyService:
             return
         playlist_track_uris = [item['track']['uri'] for item in playlist_items if 'track' in item]
 
-        self._play(playlist_track_uris, play_types.playlist, play_content_str, shuffle=True)
+        self._play(playlist_track_uris, PlayType.playlist, play_content_str, shuffle=True)
 
+    @spotify_action("Certainly, Sir. Playing from Spotify now!")
     def _play(self, track_uris, play_type, play_content_str, shuffle=True):
         """Send the play command."""
-        try:
-            self.spotify_api.play(track_uris, shuffle)
-            # jarvis.say(f'Playing {play_content_str} from Spotify.')
-            jarvis.say("Certainly, Sir. Playing from Spotify now!")
-        except ConnectionError as error:
-            error_response: Response = error.args[0]
-            raise_spotify_error(f'{play_type} {play_content_str}', error_response.status_code, error_response.json())
+        self.spotify_api.play_tracks(track_uris, shuffle)
+
+    @spotify_action("Of course, Sir!")
+    def stop_playing(self):
+        """Stop playing music."""
+        self.spotify_api.stop()
+
+    @spotify_action("Most certainly, Sir! Enjoy!")
+    def continue_playing(self):
+        self.spotify_api.play()
+
+    @spotify_action("Alright, skipping the song!")
+    def skip_song(self):
+        self.spotify_api.skip()
+
+    @spotify_action()
+    def set_repeat_mode(self, on):
+        self.spotify_api.repeat_mode(on)
+        if on:
+            jarvis.say("Alright, let's make an infinite loop of this song!")
+        else:
+            jarvis.say("Turning repeat mode off again.")

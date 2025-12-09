@@ -35,20 +35,26 @@ def continuous_processing(test_command=None):
                                                                                                   command_pause_buffer,
                                                                                                   audio_chunk.flatten(),
                                                                                                   test_command)
+
+                except Exception as error:
+                    command_finished = True  # Reset buffers after error to start anew
+                    Warn(str(error))
+                    jarvis.say("Sorry Sir, but something went terribly wrong here, please try again.")
+                finally:
                     if command_finished:
                         # Reset buffers and command
                         is_recording_command = False
                         command_audio_buffer = np.array([], dtype=np.int16)
                         command_pause_buffer = np.array([], dtype=np.int16)
-
-                except Exception as error:
-                    Warn(str(error))
-                    jarvis.say("Sorry Sir, but something went terribly wrong here, please try again.")
         except queue.Empty:
             continue  # Continue if the queue is empty
         except Exception as e:
             print(f"Error recognizing vosk_model: {e}")
             traceback.print_exc()
+            # Reset buffers and command
+            is_recording_command = False
+            command_audio_buffer = np.array([], dtype=np.int16)
+            command_pause_buffer = np.array([], dtype=np.int16)
 
 
 def keyword_detected(audio_bytes):

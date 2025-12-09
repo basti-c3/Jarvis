@@ -1,6 +1,7 @@
 import numpy as np
 
 import speech_to_text.config as config
+from spotify.CommandTypes import CommandType
 
 from spotify.SpotifyCommand import SpotifyCommand
 from speech_to_text.turn_speech_to_text import turn_speech_to_text
@@ -51,8 +52,29 @@ def get_command_text(audio):
 
 
 def process_command(command_str):
-    command_str_lower = command_str.lower()
-    if 'play' in command_str_lower:
-        spotify_command = SpotifyCommand(command_str)
-        spotify_command.execute()
+    command_str = command_str.lower()
 
+    if 'play' in command_str or 'stop' in command_str or 'continue' or 'skip' in command_str or 'repeat' in command_str:
+        spotify_command = SpotifyCommand(command_str=command_str)
+
+        # If a string is not found, find returns -1
+        # Check order of keywords (e.g. either "stop playing" vs "play please don't stop the music")
+        kw_before_play = lambda kw: 0 <= command_str.find(kw) and \
+                                    (command_str.find('play') == -1
+                                     or command_str.find(kw) < command_str.find('play')
+                                     )
+        if kw_before_play('stop'):
+            spotify_command.type = CommandType.stop
+        elif kw_before_play('continue') or command_str == 'play':
+            spotify_command.type = CommandType.continue_playing
+        elif kw_before_play('skip'):
+            spotify_command.type = CommandType.skip
+        elif kw_before_play('repeat'):
+            if command_str.find('repeat') < command_str.find('off'):
+                spotify_command.type = CommandType.stop_repeat
+            else:
+                spotify_command.type = CommandType.repeat
+        else:  # General play command. Needs to be further processed to extract the exact command
+            spotify_command.extract()
+        # Command is set / extracted --> execute
+        spotify_command.execute()

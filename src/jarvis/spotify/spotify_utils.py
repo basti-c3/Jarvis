@@ -1,6 +1,7 @@
 from requests import Response
 
 from Jarvis import jarvis
+from spotify.ResponseError import ResponseError
 from utils import Warn
 
 
@@ -66,7 +67,6 @@ def print_warning_response_json_if_possible(response: Response):
         pass
 
 
-def raise_spotify_error(play_content, status, json_content):
-    Warn(f"Spotify: Failed to play , status: {status}, {json_content}")
-    # jarvis.say(f"I apologize, but something went wrong when trying to play {play_content} from Spotify.")
-    jarvis.say(f"I apologize, but something went wrong when trying to play something from Spotify.")
+def raise_spotify_response_error(error_response: Response):
+    Warn(f"Spotify: Failed to play , status: {error_response.status_code} {error_response.reason}")
+    jarvis.say("Sorry, Sir. I encountered a problem executing the requested command to the Spotify API. The response was not as expected.")

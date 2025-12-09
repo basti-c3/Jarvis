@@ -7,6 +7,7 @@ import requests
 import base64
 
 from paths import spotify_base_url, spotify_token_url, spotify_redirect_url, spotify_auth_url, SPOTIFY_TOKEN_DIR_PATH
+from spotify.ResponseError import ResponseError
 from spotify.spotify_utils import print_warning_response_json_if_possible
 from utils import *
 
@@ -36,6 +37,7 @@ class SpotifyApiCommunicationService:
         self._access_token_dict = None  # placeholder
 
         # Connect device
+        self.device_id = None
         self._connect_device()
 
     def _connect_device(self):
@@ -297,7 +299,7 @@ class SpotifyApiCommunicationService:
                 return None
         return None
 
-    def play(self, track_uris, shuffle):
+    def play_tracks(self, track_uris, shuffle):
         """Play a list of track URIs on a specific device."""
         url = f"{self.base_url}/me/player/play"
         headers = self.get_headers()
@@ -316,4 +318,53 @@ class SpotifyApiCommunicationService:
         response = requests.put(url, headers=headers, json={"uris": track_uris})
 
         if response.status_code != 204:
-            raise ConnectionError(response)
+            raise ResponseError(response)
+
+    def stop(self):
+        """Stop playback on the currently connected device."""
+        if self.device_id is None:
+            raise ConnectionError("No connected device found to stop playback.")
+
+        url = f"{self.base_url}/me/player/pause?device_id={self.device_id}"
+        headers = self.get_headers()
+        response = requests.put(url, headers=headers)
+
+        if response.status_code not in [200, 204]:
+            raise ResponseError(response)
+
+    def play(self):
+        """Play the currently selected music, whatever that is."""
+        if self.device_id is None:
+            raise ConnectionError("No connected device found to play at.")
+
+        url = f"{self.base_url}/me/player/play?device_id={self.device_id}"
+        headers = self.get_headers()
+        response = requests.put(url, headers=headers)
+
+        if response.status_code not in [200, 204]:
+            raise ResponseError(response)
+
+    def skip(self):
+        """Skip the current song."""
+        if self.device_id is None:
+            raise ConnectionError("No connected device found to skip at.")
+
+        url = f"{self.base_url}/me/player/next?device_id={self.device_id}"
+        headers = self.get_headers()
+        response = requests.post(url, headers=headers)
+
+        if response.status_code not in [200, 204]:
+            raise ResponseError(response)
+
+    def repeat_mode(self, on):
+        """Set the repeat mode, so that the song will be repeated a lot."""
+        if self.device_id is None:
+            raise ConnectionError("No connected device found to repeat at.")
+
+        url = f"{self.base_url}/me/player/repeat?state={'track' if on else 'off'}&device_id={self.device_id}"
+
+        headers = self.get_headers()
+        response = requests.put(url, headers=headers)
+
+        if response.status_code not in [200, 204]:
+            raise ResponseError(response)

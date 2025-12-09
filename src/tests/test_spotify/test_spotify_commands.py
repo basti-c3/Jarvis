@@ -16,7 +16,7 @@ class TestSpotifyCommand:
         ]
     )
     def test_preprocessing_command(self, input_command, expected_search_str):
-        spotify_command = SpotifyCommand(input_command)
+        spotify_command = SpotifyCommand(command_str=input_command)
         assert spotify_command.search_str == expected_search_str
 
     @pytest.mark.parametrize(
@@ -56,7 +56,7 @@ class TestSpotifyCommand:
         ]
     )
     def test_spotify_command_types(self, input_command, expected_type, expected_search, expected_artist):
-        spotify_command = SpotifyCommand(input_command)
+        spotify_command = SpotifyCommand(command_str=input_command)
         assert spotify_command.type == expected_type
         assert spotify_command.search_str == expected_search
         assert spotify_command.artist_str == expected_artist
