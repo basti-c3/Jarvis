@@ -1,7 +1,6 @@
 import queue
 
 from vosk import KaldiRecognizer
-
 from text_to_speech.JarvisTTS import JarvisTTS
 from speech_to_text.JarvisSTT import JarvisSTT
 
@@ -9,18 +8,39 @@ _stt_model = None
 _tts_model = None
 _audio_queue = None
 
+_plug_lichterkette = None
+_plug_lampe = None
+_plug_fernseher = None
+_plug_kueche = None
+
 
 def init_globals():
     global _audio_queue
     global _stt_model
     global _tts_model
 
+    global _plug_lichterkette
+    global _plug_lampe
+    global _plug_fernseher
+    global _plug_kueche
+
     if _audio_queue is None:
         _audio_queue = queue.Queue()
     if _stt_model is None:
         _stt_model = JarvisSTT()
-    #if _tts_model is None:
+    # if _tts_model is None:
     #    _tts_model = JarvisTTS()
+
+    from mqtt.mqtt_utils import PLUG_LICHTERKETTE_TOPIC, PLUG_LAMPE_TOPIC, PLUG_FERNSEHER_TOPIC, PLUG_KUECHE_TOPIC
+    from mqtt.MqttPlug import MqttPlug
+    if _plug_lichterkette is None:
+        _plug_lichterkette = MqttPlug(PLUG_LICHTERKETTE_TOPIC)
+    if _plug_lampe is None:
+        _plug_lampe = MqttPlug(PLUG_LAMPE_TOPIC)
+    if _plug_fernseher is None:
+        _plug_fernseher = MqttPlug(PLUG_FERNSEHER_TOPIC)
+    if _plug_kueche is None:
+        _plug_kueche = MqttPlug(PLUG_KUECHE_TOPIC)
 
 
 def get_audio_queue():
@@ -49,3 +69,43 @@ def get_tts_model() -> JarvisTTS:
     if _tts_model is None:
         _tts_model = JarvisTTS()
     return _tts_model
+
+
+def get_plug_lichterkette():
+    from mqtt.mqtt_utils import PLUG_LICHTERKETTE_TOPIC
+    from mqtt.MqttPlug import MqttPlug
+
+    global _plug_lichterkette
+    if _plug_lichterkette is None:
+        _plug_lichterkette = MqttPlug(PLUG_LICHTERKETTE_TOPIC)
+    return _plug_lichterkette
+
+
+def get_plug_lampe():
+    from mqtt.MqttPlug import MqttPlug
+    from mqtt.mqtt_utils import PLUG_LAMPE_TOPIC
+
+    global _plug_lampe
+    if _plug_lampe is None:
+        _plug_lampe = MqttPlug(PLUG_LAMPE_TOPIC)
+    return _plug_lampe
+
+
+def get_plug_fernseher():
+    from mqtt.MqttPlug import MqttPlug
+    from mqtt.mqtt_utils import PLUG_FERNSEHER_TOPIC
+
+    global _plug_fernseher
+    if _plug_fernseher is None:
+        _plug_fernseher = MqttPlug(PLUG_FERNSEHER_TOPIC)
+    return _plug_fernseher
+
+
+def get_plug_kueche():
+    from mqtt.MqttPlug import MqttPlug
+    from mqtt.mqtt_utils import PLUG_KUECHE_TOPIC
+
+    global _plug_kueche
+    if _plug_kueche is None:
+        _plug_kueche = MqttPlug(PLUG_KUECHE_TOPIC)
+    return _plug_kueche

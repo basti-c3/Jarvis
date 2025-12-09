@@ -73,5 +73,11 @@ class Jarvis:
                 play_audio("sorrysirtherewasaproblemfindingthecorrectdevicewheretherepeatmodeshouldbeset")
             case "Sorry, Sir. I encountered a problem executing the requested command to the Spotify API. The response was not as expected.":
                 play_audio("sorrysiriencounteredaproblemexecutingtherequestedcommandtothespotifyapitheresponsewasnotasexpected")
+            case "Sorry, Sir. I encountered a problem executing the requested command to the MQTT devices. The response was not as expected.":
+                play_audio("sorrysiriencounteredaproblemexecutingtherequestedcommandtothemqttdevicestheresponsewasnotasexpected")
+            case "Turning off the lights. Good night, Sir!":
+                play_audio("turningoffthelightsgoodnightsir")
+            case "Turning on the lights. Good morning, Sir!":
+                play_audio("turningonthelightsgoodmorningsir")
 
 jarvis = Jarvis()

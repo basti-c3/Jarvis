@@ -1,0 +1,15 @@
+from mqtt.MqttCommandTypes import MqttCommandType
+from mqtt.MqttService import MqttService
+
+
+class MqttCommand:
+    def __init__(self, command_str=""):
+        self.mqtt_service = MqttService()
+        self.command_str = command_str.lower()
+        self.type = None  # Is set in the extract method
+
+    def execute(self):
+        if self.type == MqttCommandType.lights_off:
+            self.mqtt_service.turn_off_lights()
+        elif self.type == MqttCommandType.lights_on:
+            self.mqtt_service.turn_on_lights()

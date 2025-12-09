@@ -1,7 +1,6 @@
 from requests import Response
 
 from Jarvis import jarvis
-from spotify.ResponseError import ResponseError
 from utils import Warn
 
 

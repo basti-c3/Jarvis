@@ -8,7 +8,7 @@ class PlayType(Enum):
     album = "album"
 
 
-class CommandType(Enum):
+class SpotifyCommandType(Enum):
     stop = "stop"
     skip = "skip"
     continue_playing = "play"
@@ -17,4 +17,4 @@ class CommandType(Enum):
 
 
 play_types = [item.value for item in PlayType]
-basic_commands = [item.value for item in CommandType]
+spotify_basic_commands = [item.value for item in SpotifyCommandType]

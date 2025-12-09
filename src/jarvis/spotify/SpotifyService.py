@@ -1,7 +1,7 @@
 from requests import Response
 
 from Jarvis import jarvis
-from spotify.CommandTypes import PlayType
+from spotify.SpotifyCommandTypes import PlayType
 from spotify.ResponseError import ResponseError
 from spotify.SpotifyApiCommunicationService import SpotifyApiCommunicationService
 from spotify.spotify_action import spotify_action

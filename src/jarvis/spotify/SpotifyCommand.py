@@ -1,4 +1,4 @@
-from spotify.CommandTypes import PlayType, CommandType, play_types
+from spotify.SpotifyCommandTypes import PlayType, SpotifyCommandType, play_types
 from spotify.SpotifyService import SpotifyService
 from spotify.spotify_utils import *
 
@@ -66,15 +66,15 @@ class SpotifyCommand:
         elif self.type == PlayType.playlist:
             self.spotify_service.play_playlist(self.search_str)
 
-        elif self.type == CommandType.stop:
+        elif self.type == SpotifyCommandType.stop:
             self.spotify_service.stop_playing()
-        elif self.type == CommandType.continue_playing:
+        elif self.type == SpotifyCommandType.continue_playing:
             self.spotify_service.continue_playing()
-        elif self.type == CommandType.skip:
+        elif self.type == SpotifyCommandType.skip:
             self.spotify_service.skip_song()
-        elif self.type == CommandType.repeat:
+        elif self.type == SpotifyCommandType.repeat:
             self.spotify_service.set_repeat_mode(on=True)
-        elif self.type == CommandType.stop_repeat:
+        elif self.type == SpotifyCommandType.stop_repeat:
             self.spotify_service.set_repeat_mode(on=False)
         else:
             # jarvis.say(f"Sorry Sir, but I do not know how to play something called {self.type}.")

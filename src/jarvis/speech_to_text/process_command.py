@@ -1,7 +1,9 @@
 import numpy as np
 
 import speech_to_text.config as config
-from spotify.CommandTypes import CommandType
+from mqtt.MqttCommand import MqttCommand
+from mqtt.MqttCommandTypes import mqtt_basic_commands, MqttCommandType
+from spotify.SpotifyCommandTypes import SpotifyCommandType
 
 from spotify.SpotifyCommand import SpotifyCommand
 from speech_to_text.turn_speech_to_text import turn_speech_to_text
@@ -54,7 +56,11 @@ def get_command_text(audio):
 def process_command(command_str):
     command_str = command_str.lower()
 
-    if 'play' in command_str or 'stop' in command_str or 'continue' or 'skip' in command_str or 'repeat' in command_str:
+    if 'play' in command_str \
+            or 'stop' in command_str\
+            or 'continue' in command_str \
+            or 'skip' in command_str\
+            or 'repeat' in command_str:
         spotify_command = SpotifyCommand(command_str=command_str)
 
         # If a string is not found, find returns -1
@@ -64,17 +70,25 @@ def process_command(command_str):
                                      or command_str.find(kw) < command_str.find('play')
                                      )
         if kw_before_play('stop'):
-            spotify_command.type = CommandType.stop
+            spotify_command.type = SpotifyCommandType.stop
         elif kw_before_play('continue') or command_str == 'play':
-            spotify_command.type = CommandType.continue_playing
+            spotify_command.type = SpotifyCommandType.continue_playing
         elif kw_before_play('skip'):
-            spotify_command.type = CommandType.skip
+            spotify_command.type = SpotifyCommandType.skip
         elif kw_before_play('repeat'):
             if command_str.find('repeat') < command_str.find('off'):
-                spotify_command.type = CommandType.stop_repeat
+                spotify_command.type = SpotifyCommandType.stop_repeat
             else:
-                spotify_command.type = CommandType.repeat
+                spotify_command.type = SpotifyCommandType.repeat
         else:  # General play command. Needs to be further processed to extract the exact command
             spotify_command.extract()
         # Command is set / extracted --> execute
         spotify_command.execute()
+    elif 'good morning' in command_str:
+        mqtt_command = MqttCommand(command_str=command_str)
+        mqtt_command.type = MqttCommandType.lights_on
+        mqtt_command.execute()
+    elif 'good night' in command_str:
+        mqtt_command = MqttCommand(command_str=command_str)
+        mqtt_command.type = MqttCommandType.lights_off
+        mqtt_command.execute()
