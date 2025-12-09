@@ -4,8 +4,10 @@ import traceback
 import numpy as np
 
 import speech_to_text.config as config
+from Jarvis import jarvis
 from global_init import get_audio_queue, get_stt_recognizer
 from speech_to_text.process_command import record_command
+from utils import Warn
 
 
 def continuous_processing(test_command=None):
@@ -28,15 +30,20 @@ def continuous_processing(test_command=None):
             if not is_recording_command:
                 is_recording_command = keyword_detected(audio_chunk.tobytes())
             else:
-                command_finished, command_audio_buffer, command_pause_buffer = record_command(command_audio_buffer,
-                                                                                              command_pause_buffer,
-                                                                                              audio_chunk.flatten(),
-                                                                                              test_command)
-                if command_finished:
-                    # Reset buffers and command
-                    is_recording_command = False
-                    command_audio_buffer = np.array([], dtype=np.int16)
-                    command_pause_buffer = np.array([], dtype=np.int16)
+                try:
+                    command_finished, command_audio_buffer, command_pause_buffer = record_command(command_audio_buffer,
+                                                                                                  command_pause_buffer,
+                                                                                                  audio_chunk.flatten(),
+                                                                                                  test_command)
+                    if command_finished:
+                        # Reset buffers and command
+                        is_recording_command = False
+                        command_audio_buffer = np.array([], dtype=np.int16)
+                        command_pause_buffer = np.array([], dtype=np.int16)
+                        return
+                except Exception as error:
+                    Warn(str(error))
+                    jarvis.say("Sorry, something went wrong, please try again.")
         except queue.Empty:
             continue  # Continue if the queue is empty
         except Exception as e:

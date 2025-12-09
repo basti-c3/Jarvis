@@ -9,7 +9,7 @@ def run_recognition(command: str = None):
     """Run continuous recognition. Optionally feed a test command for dev/test mode."""
 
     recognition_thread = threading.Thread(target=continuous_processing, args=(command,))
-    recognition_thread.daemon = True
+    recognition_thread.daemon = False
     recognition_thread.start()
 
     try:

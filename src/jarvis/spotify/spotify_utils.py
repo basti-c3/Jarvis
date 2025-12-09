@@ -1,3 +1,9 @@
+from requests import Response
+
+from Jarvis import jarvis
+from utils import Warn
+
+
 def preprocess_spotify_search_string(command_str):
     """
     Input:  "play hello from adele on spotify" / "play hello from adele"
@@ -51,3 +57,15 @@ def extract_artist_from_search_string(search_str: str, split_words: list[str]):
 
 def normalize_whitespacing(search_str):
     return ' '.join([word for word in search_str.split(' ') if word])
+
+
+def print_warning_response_json_if_possible(response: Response):
+    try:
+        Warn(response.json())
+    except Exception:  # If not possible to convert response to json, don't print it
+        pass
+
+
+def raise_spotify_error(play_content, status, json_content):
+    Warn(f"Spotify: Failed to play , status: {status}, {json_content}")
+    jarvis.say(f"I apologize, but something went wrong when trying to play {play_content} from Spotify.")

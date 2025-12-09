@@ -7,9 +7,9 @@ if __name__ == "__main__":
     desired_sample_rate = 22050
     speaker_name = "jarvis_avg"
     base_path = "C:/Users/basti/AppData/Local/tts/"
-    speaker_wav_path = "../../../data/voice_cloning/Jarvis/jarvis.wav"  #
-    voice_dir_path = "../../../data/voice_cloning/Basti/training/wavs"
-    data_dir_path = "../../../data/voice_cloning/Jarvis"
+    speaker_wav_path = "../../data/voice_cloning/Jarvis/jarvis.wav"  #
+    voice_dir_path = "../../data/voice_cloning/Basti/training/wavs"
+    data_dir_path = "../../data/voice_cloning/Jarvis"
     model_dir_path = "../../data/voice_cloning/Jarvis/Jarvis_voice_model-June-17-2025_02+01AM-ea812f1"
     language = "en"
     output_text = "Play hard, work less. This is America."
