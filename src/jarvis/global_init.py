@@ -13,6 +13,8 @@ _plug_lampe = None
 _plug_fernseher = None
 _plug_kueche = None
 
+_bulb_1, _bulb_2, _bulb_3 = None, None, None
+
 
 def init_globals():
     global _audio_queue
@@ -109,3 +111,15 @@ def get_plug_kueche():
     if _plug_kueche is None:
         _plug_kueche = MqttPlug(PLUG_KUECHE_TOPIC, is_a_light=False)
     return _plug_kueche
+
+
+def get_light_bulbs() -> []:
+    from mqtt.MqttBulb import MqttBulb
+    from mqtt.mqtt_utils import BULB_1, BULB_2, BULB_3
+
+    global _bulb_1, _bulb_2, _bulb_3
+    if _bulb_1 is None:
+        _bulb_1 = MqttBulb(BULB_1)
+        _bulb_2 = MqttBulb(BULB_2)
+        _bulb_3 = MqttBulb(BULB_3)
+    return [_bulb_1, _bulb_2, _bulb_3]

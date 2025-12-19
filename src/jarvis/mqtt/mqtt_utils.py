@@ -11,6 +11,10 @@ PLUG_LAMPE_TOPIC = "plug_lampe"  # 2
 PLUG_FERNSEHER_TOPIC = "plug_fernseher"  # 3
 PLUG_KUECHE_TOPIC = "plug_kueche"  # 4
 
+BULB_1 = "bulb_1"
+BULB_2 = "bulb_2"
+BULB_3 = "bulb_3"
+
 
 def raise_mqtt_response_error(error_response):
     Warn(f"Mqtt: Failed to do something , status: {error_response.status_code} {error_response.reason}")
