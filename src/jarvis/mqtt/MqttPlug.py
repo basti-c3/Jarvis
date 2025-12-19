@@ -8,10 +8,12 @@ from utils import Warn
 class MqttPlug:
     client: Client
     topic: str
+    is_a_light: bool
 
-    def __init__(self, client_id):
+    def __init__(self, client_id, is_a_light):
         try:
             self.topic = client_id
+            self.is_a_light = is_a_light
             self.client = Client(client_id=client_id)
             self.client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
             self.client.on_connect = self._on_mqtt_connect

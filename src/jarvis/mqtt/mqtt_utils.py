@@ -9,7 +9,7 @@ MQTT_PASSWORD = "gdg71U0n3SityGB4TEfo"  # MQTT password
 PLUG_LICHTERKETTE_TOPIC = "plug_lichterkette"  # 1
 PLUG_LAMPE_TOPIC = "plug_lampe"  # 2
 PLUG_FERNSEHER_TOPIC = "plug_fernseher"  # 3
-PLUG_KUECHE_TOPIC = "plug_kueche"  # 3
+PLUG_KUECHE_TOPIC = "plug_kueche"  # 4
 
 
 def raise_mqtt_response_error(error_response):

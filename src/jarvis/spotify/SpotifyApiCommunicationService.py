@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 import requests
 import base64
 
+from dotenv import load_dotenv
+
 from paths import spotify_base_url, spotify_token_url, spotify_redirect_url, spotify_auth_url, SPOTIFY_TOKEN_DIR_PATH
 from spotify.ResponseError import ResponseError
 from spotify.spotify_utils import print_warning_response_json_if_possible
@@ -23,7 +25,7 @@ class SpotifyApiCommunicationService:
         self.token_date_format = "%Y-%m-%d_%H-%M-%S"
 
         # Load environment variables from .env file
-        # load_dotenv()
+        load_dotenv()
         self.client_id = os.getenv('SPOTIFY_CLIENT_ID')
         self.client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
         if not self.client_id or not self.client_secret:

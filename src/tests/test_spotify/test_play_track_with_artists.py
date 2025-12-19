@@ -5,7 +5,7 @@ from speech_to_text.process_command import process_command
 class TestProcessingCommand:
     """Tests for verifying song recognition and Spotify command handling."""
 
-    def test_play_track_variants(self):
+    def test_play_track_with_artist(self):
         """Tests that recognized play commands trigger Spotify API call."""
         import spotify.SpotifyService as spotify_api
         # Get the method object directly from the class

@@ -13,9 +13,11 @@ class MqttService:
     @mqtt_action("Turning off the lights. Good night, Sir!")
     def turn_off_lights(self):
         for plug in self.all_plugs:
-            plug.turn_off()
+            if plug.is_a_light:
+                plug.turn_off()
 
     @mqtt_action("Turning on the lights. Good morning, Sir!")
     def turn_on_lights(self):
         for plug in self.all_plugs:
-            plug.turn_on()
+            if plug.is_a_light:
+                plug.turn_on()

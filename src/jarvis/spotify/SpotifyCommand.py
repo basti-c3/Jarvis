@@ -57,6 +57,11 @@ class SpotifyCommand:
         self.search_str = normalize_whitespacing(search_str)  # To remove possible double spaces
 
     def execute(self):
+        if self.type == None:
+            # jarvis.say(f"Sorry Sir, but I do not know how to play something called {self.type}.")
+            jarvis.say(f"Sorry Sir, but I did not understand what you want me to play.")
+            raise Exception(
+                f"Error in SpotifyCommand in execute: self.type = is None, please set type or call extract() before calling execute!")
         if self.type == PlayType.track:
             self.spotify_service.play_track(self.search_str, self.artist_str)
         elif self.type == PlayType.artist:

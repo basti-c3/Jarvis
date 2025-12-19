@@ -34,13 +34,13 @@ def init_globals():
     from mqtt.mqtt_utils import PLUG_LICHTERKETTE_TOPIC, PLUG_LAMPE_TOPIC, PLUG_FERNSEHER_TOPIC, PLUG_KUECHE_TOPIC
     from mqtt.MqttPlug import MqttPlug
     if _plug_lichterkette is None:
-        _plug_lichterkette = MqttPlug(PLUG_LICHTERKETTE_TOPIC)
+        _plug_lichterkette = MqttPlug(PLUG_LICHTERKETTE_TOPIC, is_a_light=True)
     if _plug_lampe is None:
-        _plug_lampe = MqttPlug(PLUG_LAMPE_TOPIC)
+        _plug_lampe = MqttPlug(PLUG_LAMPE_TOPIC, is_a_light=True)
     if _plug_fernseher is None:
-        _plug_fernseher = MqttPlug(PLUG_FERNSEHER_TOPIC)
+        _plug_fernseher = MqttPlug(PLUG_FERNSEHER_TOPIC, is_a_light=False)
     if _plug_kueche is None:
-        _plug_kueche = MqttPlug(PLUG_KUECHE_TOPIC)
+        _plug_kueche = MqttPlug(PLUG_KUECHE_TOPIC, is_a_light=False)
 
 
 def get_audio_queue():
@@ -77,7 +77,7 @@ def get_plug_lichterkette():
 
     global _plug_lichterkette
     if _plug_lichterkette is None:
-        _plug_lichterkette = MqttPlug(PLUG_LICHTERKETTE_TOPIC)
+        _plug_lichterkette = MqttPlug(PLUG_LICHTERKETTE_TOPIC, is_a_light=True)
     return _plug_lichterkette
 
 
@@ -87,7 +87,7 @@ def get_plug_lampe():
 
     global _plug_lampe
     if _plug_lampe is None:
-        _plug_lampe = MqttPlug(PLUG_LAMPE_TOPIC)
+        _plug_lampe = MqttPlug(PLUG_LAMPE_TOPIC, is_a_light=True)
     return _plug_lampe
 
 
@@ -97,7 +97,7 @@ def get_plug_fernseher():
 
     global _plug_fernseher
     if _plug_fernseher is None:
-        _plug_fernseher = MqttPlug(PLUG_FERNSEHER_TOPIC)
+        _plug_fernseher = MqttPlug(PLUG_FERNSEHER_TOPIC, is_a_light=False)
     return _plug_fernseher
 
 
@@ -107,5 +107,5 @@ def get_plug_kueche():
 
     global _plug_kueche
     if _plug_kueche is None:
-        _plug_kueche = MqttPlug(PLUG_KUECHE_TOPIC)
+        _plug_kueche = MqttPlug(PLUG_KUECHE_TOPIC, is_a_light=False)
     return _plug_kueche
