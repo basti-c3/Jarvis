@@ -1,6 +1,8 @@
 import threading
 import sounddevice as sd
-from speech_to_text import config
+
+from shared.stop_event import stop_event
+from shared import stt_config as config
 from speech_to_text.audio_callback import audio_callback
 from speech_to_text.process_audio import continuous_processing
 
@@ -8,8 +10,11 @@ from speech_to_text.process_audio import continuous_processing
 def run_recognition(command: str = None):
     """Run continuous recognition. Optionally feed a test command for dev/test mode."""
 
-    recognition_thread = threading.Thread(target=continuous_processing, args=(command,))
-    recognition_thread.daemon = False
+    recognition_thread = threading.Thread(
+        target=continuous_processing,
+        args=(command,),
+        daemon=True
+    )
     recognition_thread.start()
 
     try:
@@ -20,9 +25,9 @@ def run_recognition(command: str = None):
             callback=audio_callback,
             blocksize=int(config.BUFFER_DURATION * config.AUDIO_RATE),
         ):
-            while True:
-                pass  # Keep main thread alive
+            stop_event.wait()
     except KeyboardInterrupt:
         print("Stopping...")
+        stop_event.set()
     finally:
-        print("Resources cleaned up. Exiting program.")
+        print("Exiting core program.")

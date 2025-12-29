@@ -1,6 +1,6 @@
 import os
 from vosk import Model, KaldiRecognizer
-import speech_to_text.config as config
+import shared.stt_config as config
 from paths import STT_MODEL_PATH
 
 

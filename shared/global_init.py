@@ -1,6 +1,9 @@
 import queue
 
+import zmq
 from vosk import KaldiRecognizer
+
+from shared.ipc import client
 from text_to_speech.JarvisTTS import JarvisTTS
 from speech_to_text.JarvisSTT import JarvisSTT
 
@@ -14,6 +17,11 @@ _plug_fernseher = None
 _plug_kueche = None
 
 _bulb_1, _bulb_2, _bulb_3 = None, None, None
+
+stt_service = client("tcp://127.0.0.1:5555")
+tts_service = client("tcp://127.0.0.1:5556")
+stt_service.setsockopt(zmq.RCVTIMEO, 3000)
+tts_service.setsockopt(zmq.RCVTIMEO, 3000)
 
 
 def init_globals():

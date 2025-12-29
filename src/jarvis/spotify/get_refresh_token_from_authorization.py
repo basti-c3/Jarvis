@@ -5,7 +5,7 @@ import requests
 from dotenv import load_dotenv
 
 from paths import spotify_token_url, spotify_redirect_url
-from utils import Warn
+from shared.utils import Warn
 
 
 def get_refresh_token_from_authorization(authorization_code):

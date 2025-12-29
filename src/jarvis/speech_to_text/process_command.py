@@ -1,12 +1,12 @@
 import numpy as np
 
-import speech_to_text.config as config
+import shared.stt_config as config
 from mqtt.MqttCommand import MqttCommand
-from mqtt.MqttCommandTypes import mqtt_basic_commands, MqttCommandType
+from mqtt.MqttCommandTypes import MqttCommandType
 from spotify.SpotifyCommandTypes import SpotifyCommandType
 
 from spotify.SpotifyCommand import SpotifyCommand
-from speech_to_text.turn_speech_to_text import turn_speech_to_text
+from speech_to_text.transcribe_command import transcribe_command
 
 
 def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chunk: np.array, test_command=None):
@@ -29,28 +29,16 @@ def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chu
             print("Detected pause in speech. Ending command capture...")
         else:
             print(f"Maximum command length of {config.MAX_COMMAND_LENGTH} was reached. Ending command capture...")
-        command_str = get_command_text(audio_buffer) if test_command is None else test_command
-        process_command(command_str)  # Process command
+        if test_command is None:
+            command_str = transcribe_command(audio_buffer)
+            print(f"Command: {command_str}")
+        else:
+            command_str = test_command
+
+        if command_str is not None:
+            process_command(command_str)  # Process command
         return True, audio_buffer, pause_buffer
     return False, audio_buffer, pause_buffer
-
-
-def get_command_text(audio):
-    result_command = turn_speech_to_text(audio)
-    print("--------------------------------------------------------")
-    print(f"Recognized Command: {result_command}")
-
-    result_txt_lower = result_command.lower()
-    keyword_index = result_txt_lower.find(config.KEYWORD)
-    if keyword_index != -1:
-        # Calculate the starting position of the text after the keyword
-        start_index = keyword_index + len(config.KEYWORD)
-
-        # Slice the string to get the text after the keyword
-        text_after_keyword = result_command[start_index:].strip()
-        return text_after_keyword
-    else:
-        raise Exception(f"Error in get_command_text: The keyword '{config.KEYWORD}' was not found in the text.")
 
 
 def process_command(command_str):

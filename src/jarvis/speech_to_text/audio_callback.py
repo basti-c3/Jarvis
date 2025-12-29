@@ -1,4 +1,4 @@
-from global_init import get_audio_queue
+from shared.global_init import get_audio_queue
 
 
 def audio_callback(indata, frames, time, status):

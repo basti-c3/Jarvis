@@ -4,7 +4,7 @@ from paho.mqtt.client import Client
 
 from mqtt.MqttError import MqttError
 from mqtt.mqtt_utils import *
-from utils import Warn
+from shared.utils import Warn
 
 
 class MqttDevice:

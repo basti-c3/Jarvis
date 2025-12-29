@@ -1,7 +1,7 @@
 from requests import Response
 
 from Jarvis import jarvis
-from utils import Warn
+from shared.utils import Warn
 
 
 def preprocess_spotify_search_string(command_str):

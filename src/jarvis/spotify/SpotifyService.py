@@ -1,12 +1,8 @@
-from requests import Response
-
 from Jarvis import jarvis
 from spotify.SpotifyCommandTypes import PlayType
-from spotify.ResponseError import ResponseError
 from spotify.SpotifyApiCommunicationService import SpotifyApiCommunicationService
 from spotify.spotify_action import spotify_action
-from spotify.spotify_utils import raise_spotify_response_error
-from utils import *
+from shared.utils import *
 
 
 class SpotifyService:

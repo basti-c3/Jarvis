@@ -103,7 +103,7 @@ def create_new_speaker(new_speaker_name, wav_dir_path, delete_rest=False):
 
 
 def create_new_speaker_embedding_for_xtts_model(wav_dir_path):
-    tts: TTS = load_xtts_model_from_checkpoint()
+    tts = load_xtts_model_from_checkpoint()
     xtts: Xtts = tts.synthesizer.tts_model
 
     gpt_cond_latents = []

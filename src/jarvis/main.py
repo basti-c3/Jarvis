@@ -1,5 +1,5 @@
 import time
-from global_init import init_globals
+from shared.global_init import init_globals
 from settings.config_loader import load_config
 
 

@@ -1,4 +1,4 @@
-from global_init import *
+from shared.global_init import *
 from mqtt.mqtt_action import mqtt_action
 
 
