@@ -84,11 +84,35 @@ def process_command(command_str):
             spotify_command.extract()
         # Command is set / extracted --> execute
         spotify_command.execute()
-    elif 'good morning' in command_str:
+
+    elif 'kitchen' in command_str:
+        mqtt_command = MqttCommand(command_str=command_str)
+        if 'on' in command_str:
+            mqtt_command.type = MqttCommandType.kitchen_on
+            mqtt_command.execute()
+        elif 'off' in command_str:
+            mqtt_command.type = MqttCommandType.kitchen_off
+            mqtt_command.execute()
+        else:
+            mqtt_command.type = MqttCommandType.kitchen_toggle
+            mqtt_command.execute()
+    elif 'good morning' in command_str or 'goodmorning' in command_str:
         mqtt_command = MqttCommand(command_str=command_str)
         mqtt_command.type = MqttCommandType.lights_on
         mqtt_command.execute()
-    elif 'good night' in command_str:
+    elif 'good night' in command_str or 'goodnight' in command_str:
         mqtt_command = MqttCommand(command_str=command_str)
         mqtt_command.type = MqttCommandType.lights_off
+        mqtt_command.execute()
+    elif 'light' in command_str:
+        mqtt_command = MqttCommand(command_str=command_str)
+        if 'on' in command_str:
+            mqtt_command.type = MqttCommandType.lights_on
+            mqtt_command.execute()
+        elif 'off' in command_str:
+            mqtt_command.type = MqttCommandType.lights_off
+            mqtt_command.execute()
+    elif 'comfortable' in command_str or 'cozy' in command_str:
+        mqtt_command = MqttCommand(command_str=command_str)
+        mqtt_command.type = MqttCommandType.cozy
         mqtt_command.execute()

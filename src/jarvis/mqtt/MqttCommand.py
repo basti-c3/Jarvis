@@ -13,3 +13,11 @@ class MqttCommand:
             self.mqtt_service.turn_off_lights()
         elif self.type == MqttCommandType.lights_on:
             self.mqtt_service.turn_on_lights()
+        elif self.type == MqttCommandType.cozy:
+            self.mqtt_service.make_it_cozy()
+        elif self.type == MqttCommandType.kitchen_on:
+            self.mqtt_service.turn_kitchen_plug_on()
+        elif self.type == MqttCommandType.kitchen_off:
+            self.mqtt_service.turn_kitchen_plug_off()
+        elif self.type == MqttCommandType.kitchen_toggle:
+            self.mqtt_service.kitchen_plug_toggle()

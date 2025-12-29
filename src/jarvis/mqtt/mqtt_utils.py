@@ -1,15 +1,15 @@
 from Jarvis import jarvis
 from utils import Warn
 
-MQTT_BROKER = "192.168.178.76"  # Replace with your Mosquitto broker IP
+MQTT_BROKER = "192.168.178.52"  # Replace with your Mosquitto broker IP
 MQTT_PORT = 1883  # Default MQTT port
 MQTT_USER = "basti"  # MQTT username (if set)
 MQTT_PASSWORD = "gdg71U0n3SityGB4TEfo"  # MQTT password
 
-PLUG_LICHTERKETTE_TOPIC = "plug_lichterkette"  # 1
-PLUG_LAMPE_TOPIC = "plug_lampe"  # 2
-PLUG_FERNSEHER_TOPIC = "plug_fernseher"  # 3
-PLUG_KUECHE_TOPIC = "plug_kueche"  # 4
+PLUG_LICHTERKETTE_TOPIC = "plug_lichterkette_1"  # 1
+PLUG_LAMPE_TOPIC = "plug_lampe_2"  # 2
+PLUG_FERNSEHER_TOPIC = "plug_fernseher_3"  # 3
+PLUG_KUECHE_TOPIC = "plug_kueche_4"  # 4
 
 BULB_1 = "bulb_1"
 BULB_2 = "bulb_2"

@@ -79,5 +79,8 @@ class Jarvis:
                 play_audio("turningoffthelightsgoodnightsir")
             case "Turning on the lights. Good morning, Sir!":
                 play_audio("turningonthelightsgoodmorningsir")
-
+            case "Enjoy a comfortable evening!":
+                play_audio("enjoyacomfortableevening")
+            case "Of course, here you go!":
+                play_audio("ofcoursehereyougo")
 jarvis = Jarvis()

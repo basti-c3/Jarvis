@@ -15,7 +15,6 @@ class TestMqttBasicCommand:
 
         process_command("Jarvis, good Morning")
 
-
     def test_turn_off_lights(self):
         """Tests that turn off the light bulbs."""
         import mqtt.MqttService as mqtt_service
@@ -26,4 +25,3 @@ class TestMqttBasicCommand:
             mock_turn_off_lights.assert_called_once_with()
 
         process_command("Jarvis, good night")
-
