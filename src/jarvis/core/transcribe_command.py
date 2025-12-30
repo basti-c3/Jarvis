@@ -15,4 +15,5 @@ def transcribe_command(audio_buffer: np.ndarray):
     except zmq.error.Again:  # timeout exception
         # Log a specific error message
         Warn("ERROR: Speech to text service did not respond within timeout!")
+        jarvis.reset_stt_service_client()
         jarvis.say("Sorry Sir, but the speech service is not responding.")

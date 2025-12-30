@@ -1,5 +1,6 @@
 from pathlib import Path
 
+WAKE_WORD_PATH = "settings/Jarvis_en_windows_v4_0_0.ppn"
 spotify_base_url = "https://api.spotify.com/v1"
 spotify_token_url = "https://accounts.spotify.com/api/token"
 spotify_redirect_url = 'http://localhost:3000/callback'

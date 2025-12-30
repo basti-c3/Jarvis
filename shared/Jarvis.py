@@ -1,12 +1,17 @@
 import zmq
+
+from shared.ipc import client
 from shared.utils import Warn
 
 
 class Jarvis:
     def __init__(self):
+        self._wake_word = None
         self._audio_queue = None
+
         self._stt = None
         self._tts = None
+
         self._plugs = {}
         self._bulbs = None
 
@@ -19,6 +24,13 @@ class Jarvis:
             from queue import Queue
             self._audio_queue = Queue()
         return self._audio_queue
+
+    @property
+    def wake_word(self):
+        if self._wake_word is None:
+            from src.jarvis.core.WakeWordEngine import WakeWordEngine
+            self._wake_word = WakeWordEngine()
+        return self._wake_word
 
     @property
     def stt(self):
@@ -79,7 +91,6 @@ class Jarvis:
     @property
     def stt_service_client(self):
         if self._stt_service_client is None:
-            from shared.ipc import client
             self._stt_service_client = client("tcp://127.0.0.1:5555", stream_pattern=zmq.REQ)
             self._stt_service_client.setsockopt(zmq.RCVTIMEO, 3000)
         return self._stt_service_client
@@ -87,7 +98,6 @@ class Jarvis:
     @property
     def tts_service_client(self):
         if self._tts_service_client is None:
-            from shared.ipc import client
             self._tts_service_client = client("tcp://127.0.0.1:5556", stream_pattern=zmq.REQ)
             self._tts_service_client.setsockopt(zmq.RCVTIMEO, 3000)
         return self._tts_service_client
@@ -99,6 +109,10 @@ class Jarvis:
         except zmq.error.Again:  # timeout exception
             # Log a specific error message
             Warn("ERROR in TTS: Speech to text service did not respond within timeout!")
+
+    def reset_stt_service_client(self):
+        self.stt_service_client.close()
+        self._stt_service_client = client("tcp://127.0.0.1:5555", stream_pattern=zmq.REQ)
 
 
 jarvis = Jarvis()

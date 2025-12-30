@@ -1,10 +1,33 @@
+import numpy as np
+
 from shared.Jarvis import jarvis
 
 
 def audio_callback(indata, frames, time, status):
-    """Callback function for sounddevice to receive audio data."""
-    if status:
-        print(status, flush=True)
-    # Convert vosk_model data to bytes and put it in the queue
-    audio_queue = jarvis.audio_queue
-    audio_queue.put(indata.copy())
+    """Callback function for receiving audio data."""
+    # Flatten and convert to int16
+    pcm = indata[:, 0].astype(np.int16)
+
+    # Split into Porcupine-sized frames
+    frame_len = jarvis.wake_word.frame_length()
+    for i in range(0, len(pcm), frame_len):
+        frame = pcm[i:i + frame_len]
+        if len(frame) == frame_len:
+            jarvis.audio_queue.put(frame)
+
+    # Handle last partial frame (if any)
+    remainder = len(pcm) % frame_len
+    if remainder != 0:
+        # Take the last frame_len samples ending at pcm[-1]
+        last_frame = pcm[-frame_len:]
+
+        # If pcm is shorter than frame_len, pad at the front
+        if len(last_frame) < frame_len:
+            pad_size = frame_len - len(last_frame)
+            last_frame = np.pad(
+                last_frame,
+                (pad_size, 0),
+                mode="constant"
+            )
+
+        jarvis.audio_queue.put(last_frame)

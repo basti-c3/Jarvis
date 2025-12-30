@@ -4,7 +4,10 @@ import traceback
 import numpy as np
 from collections import deque
 
+import winsound
+
 import shared.stt_config as config
+from core.play_wakeword_sound import play_wakeword_sound
 from core.process_command import record_command
 from shared.Jarvis import jarvis
 from shared.stop_event import stop_event
@@ -16,9 +19,9 @@ def continuous_processing(test_command=None):
         Continuously process audio data from the queue and perform speech recognition
         to detect if a command is coming in.
      """
-    recognizer = jarvis.recognizer
 
     is_recording_command = False
+    ignore_initial_pause_time = 0 # Set at keyword detection
     detected_silence_time = 0
     command_audio_buffer = np.array([], dtype=np.int16)
     command_pause_buffer = np.array([], dtype=np.int16)
@@ -34,18 +37,33 @@ def continuous_processing(test_command=None):
             audio_chunk = audio_queue.get(timeout=1)  # Get audio data from the queu
             pre_roll_buffer.extend(audio_chunk)
 
+            if ignore_initial_pause_time > 0:
+                # Skip counting silence for the initial assistant audio
+                ignore_initial_pause_time -= config.BUFFER_DURATION
+                detected_silence_time = 0
             if np.mean(np.abs(audio_chunk)) < config.SILENCE_THRESHOLD:
                 detected_silence_time += config.BUFFER_DURATION
             else:
                 detected_silence_time = 0
 
             if not is_recording_command:
-                is_recording_command = keyword_detected(audio_chunk.tobytes())
-                if is_recording_command:
-                    command_audio_buffer = np.fromiter(pre_roll_buffer, dtype=np.int16) # Start the command with the keyword audio_chunk + some prebuffer
+                keyword_index = jarvis.wake_word.process(audio_chunk)
+
+                if keyword_index >= 0:
+                    print("Wake word detected!")
+                    play_wakeword_sound("../../data/precalculated_jarvis_audios/yes.wav")
+                    is_recording_command = True
+
+                    # How long the assistant audio is (in seconds)
+                    ignore_initial_pause_time = 1.2  # adjust to length of your "Yes?" sound
+
+                    # Include pre-roll audio
+                    command_audio_buffer = np.fromiter(
+                        pre_roll_buffer, dtype=np.int16
+                    )
                     command_pause_buffer = command_audio_buffer.copy()
+
                 elif not is_recording_command and detected_silence_time >= config.RESET_AUDIO_BUFFER_AFTER:
-                    recognizer.Reset()
                     detected_silence_time = 0
                     pre_roll_buffer.clear()
                     command_audio_buffer = np.array([], dtype=np.int16)
@@ -64,7 +82,6 @@ def continuous_processing(test_command=None):
                     if command_finished:
                         # Reset buffers and command
                         is_recording_command = False
-                        recognizer.Reset()
                         pre_roll_buffer.clear()
                         command_audio_buffer = np.array([], dtype=np.int16)
                         command_pause_buffer = np.array([], dtype=np.int16)
@@ -77,15 +94,3 @@ def continuous_processing(test_command=None):
             is_recording_command = False
             command_audio_buffer = np.array([], dtype=np.int16)
             command_pause_buffer = np.array([], dtype=np.int16)
-
-
-def keyword_detected(audio_bytes):
-    recognizer = jarvis.recognizer
-    recognizer.AcceptWaveform(audio_bytes)  # 1. Feed audio into the recognizer
-    partial = recognizer.PartialResult().lower()  # 2. Read the current partial hypothesis
-    print(f"Partial Result: {partial}")
-    if config.KEYWORD in partial.lower():
-        recognizer.Reset()
-        return True
-
-    return False

@@ -3,7 +3,7 @@ from vosk import SetLogLevel
 
 KEYWORD = "jarvis".lower()  # make sure it is lower case!
 
-BUFFER_DURATION = 0.5  # Duration of each buffer in seconds
+BUFFER_DURATION = 0.032  # Duration of each buffer in seconds
 AUDIO_RATE = 16000  # Sampling rate should be 16000 Hz for vosk
 CHANNELS = 1  # Mono vosk for vosk
 MAX_COMMAND_LENGTH = 20  # maximum seconds of commands

@@ -10,7 +10,6 @@ from spotify.SpotifyCommand import SpotifyCommand
 
 
 def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chunk: np.array, test_command=None):
-    print("Recording command...")
     audio_buffer = np.concatenate((audio_buffer, new_audio_chunk))
     pause_buffer = np.concatenate((pause_buffer, new_audio_chunk))
 
