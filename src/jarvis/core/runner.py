@@ -1,10 +1,10 @@
 import threading
 import sounddevice as sd
 
+from core.audio_callback import audio_callback
+from core.process_audio import continuous_processing
 from shared.stop_event import stop_event
 from shared import stt_config as config
-from speech_to_text.audio_callback import audio_callback
-from speech_to_text.process_audio import continuous_processing
 
 
 def run_recognition(command: str = None):

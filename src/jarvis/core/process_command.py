@@ -1,12 +1,12 @@
 import numpy as np
 
 import shared.stt_config as config
+from core.transcribe_command import transcribe_command
 from mqtt.MqttCommand import MqttCommand
 from mqtt.MqttCommandTypes import MqttCommandType
 from spotify.SpotifyCommandTypes import SpotifyCommandType
 
 from spotify.SpotifyCommand import SpotifyCommand
-from speech_to_text.transcribe_command import transcribe_command
 
 
 def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chunk: np.array, test_command=None):

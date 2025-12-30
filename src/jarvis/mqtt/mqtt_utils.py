@@ -1,10 +1,12 @@
-from Jarvis import jarvis
+import os
+
+from shared.Jarvis import jarvis
 from shared.utils import Warn
 
-MQTT_BROKER = "192.168.178.52"  # Replace with your Mosquitto broker IP
-MQTT_PORT = 1883  # Default MQTT port
-MQTT_USER = "basti"  # MQTT username (if set)
-MQTT_PASSWORD = "gdg71U0n3SityGB4TEfo"  # MQTT password
+MQTT_BROKER = os.getenv('MQTT_BROKER')  # Replace with your Mosquitto broker IP
+MQTT_PORT = int(os.getenv('MQTT_PORT'))  # Default MQTT port
+MQTT_USER = os.getenv('MQTT_USER')  # MQTT username (if set)
+MQTT_PASSWORD = os.getenv('MQTT_PASSWORD')  # MQTT password
 
 PLUG_LICHTERKETTE_TOPIC = "plug_lichterkette_1"  # 1
 PLUG_LAMPE_TOPIC = "plug_lampe_2"  # 2

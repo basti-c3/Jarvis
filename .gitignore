@@ -13,3 +13,5 @@
 # Ignore TTS data and images
 /TTS/tests/data/*
 /TTS/images/*
+
+/src/tests/manual_tests/*

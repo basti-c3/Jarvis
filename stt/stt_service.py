@@ -11,5 +11,4 @@ while True:
         # Ensure right type before
         raise Exception(f"Error in speech_to_text service: Only takes audio bytes at this point, but got {type(audio_bytes)}")
     text = get_command_text(audio_bytes)
-    print(f"reached here22! {text}")
     stt_service_server.send_string(text)

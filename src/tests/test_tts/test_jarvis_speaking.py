@@ -1,7 +1,4 @@
-from unittest.mock import patch
-
-
-from speech_to_text.process_command import process_command
+from shared.Jarvis import jarvis
 
 
 class TestCreatingAudioOutput:
@@ -9,5 +6,5 @@ class TestCreatingAudioOutput:
 
     def test_speak(self):
         """Tests speaking."""
-        from Jarvis import jarvis
+
         jarvis.say("This is a test phrase!")

@@ -1,15 +1,15 @@
-from shared.global_init import *
+from shared.Jarvis import jarvis
 from mqtt.mqtt_action import mqtt_action
 
 
 class MqttService:
     def __init__(self):
-        self.plug_lichterkette = get_plug_lichterkette()
-        self.plug_lampe = get_plug_lampe()
-        self.plug_fernseher = get_plug_fernseher()
-        self.plug_kueche = get_plug_kueche()
+        self.plug_lichterkette = jarvis.plug_lichterkette
+        self.plug_lampe = jarvis.plug_lampe
+        self.plug_fernseher = jarvis.plug_fernseher
+        self.plug_kueche = jarvis.plug_kueche
         self.all_plugs = [self.plug_lichterkette, self.plug_lampe, self.plug_fernseher, self.plug_kueche]
-        self.all_bulbs = get_light_bulbs()
+        self.all_bulbs = jarvis.bulbs
 
     @mqtt_action("Turning off the lights. Good night, Sir!")
     def turn_off_lights(self):

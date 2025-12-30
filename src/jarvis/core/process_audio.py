@@ -5,10 +5,9 @@ import numpy as np
 from collections import deque
 
 import shared.stt_config as config
-from Jarvis import jarvis
-from shared.global_init import get_audio_queue, get_stt_recognizer
+from core.process_command import record_command
+from shared.Jarvis import jarvis
 from shared.stop_event import stop_event
-from speech_to_text.process_command import record_command
 from shared.utils import Warn
 
 
@@ -17,7 +16,7 @@ def continuous_processing(test_command=None):
         Continuously process audio data from the queue and perform speech recognition
         to detect if a command is coming in.
      """
-    recognizer = get_stt_recognizer()
+    recognizer = jarvis.recognizer
 
     is_recording_command = False
     detected_silence_time = 0
@@ -31,7 +30,7 @@ def continuous_processing(test_command=None):
     while not stop_event.is_set():
         try:
             # Get audio data from the queue
-            audio_queue = get_audio_queue()
+            audio_queue = jarvis.audio_queue
             audio_chunk = audio_queue.get(timeout=1)  # Get audio data from the queu
             pre_roll_buffer.extend(audio_chunk)
 
@@ -81,7 +80,7 @@ def continuous_processing(test_command=None):
 
 
 def keyword_detected(audio_bytes):
-    recognizer = get_stt_recognizer()
+    recognizer = jarvis.recognizer
     recognizer.AcceptWaveform(audio_bytes)  # 1. Feed audio into the recognizer
     partial = recognizer.PartialResult().lower()  # 2. Read the current partial hypothesis
     print(f"Partial Result: {partial}")

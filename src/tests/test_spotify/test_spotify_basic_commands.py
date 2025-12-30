@@ -1,5 +1,7 @@
 from unittest.mock import patch
-from speech_to_text.process_command import process_command
+
+from core.process_command import process_command
+
 
 class TestSpotifyBasicCommand:
     """Pytest-style tests for SpotifyCommand basic commands."""
