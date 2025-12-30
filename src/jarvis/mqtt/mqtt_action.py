@@ -1,6 +1,7 @@
 from Jarvis import jarvis
 from mqtt.MqttError import MqttError
 from mqtt.mqtt_utils import raise_mqtt_response_error
+from shared.utils import Warn
 
 
 def mqtt_action(success_message: str = None):
@@ -11,7 +12,10 @@ def mqtt_action(success_message: str = None):
             try:
                 result = func(self, *args, **kwargs)
                 if success_message:
-                    jarvis.say(success_message)
+                    try:
+                        jarvis.say(success_message)
+                    except Exception as error:
+                        Warn(f"ERROR in jarvis speaking: {str(error)}")
                 return result
             except MqttError as error:
                 raise_mqtt_response_error(error.args[0])

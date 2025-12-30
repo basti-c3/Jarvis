@@ -1,9 +1,9 @@
 import json
 from datetime import datetime
 
-import numpy as np
 import shared.stt_config as config
 from shared.global_init import get_stt_recognizer
+from shared.utils import Warn
 
 
 def get_command_text(audio_bytes):
@@ -13,15 +13,16 @@ def get_command_text(audio_bytes):
 
     result_txt_lower = result_command.lower()
     keyword_index = result_txt_lower.find(config.KEYWORD)
-    if keyword_index != -1:
+    if keyword_index == -1:
+        Warn(f"Warning: In get_command_text: The keyword '{config.KEYWORD}' was not found in the text.")
+        return result_txt_lower
+    else:
         # Calculate the starting position of the text after the keyword
         start_index = keyword_index + len(config.KEYWORD)
 
         # Slice the string to get the text after the keyword
         text_after_keyword = result_command[start_index:].strip()
         return text_after_keyword
-    else:
-        raise Exception(f"Error in get_command_text: The keyword '{config.KEYWORD}' was not found in the text.")
 
 
 def turn_speech_to_text(audio_bytes):
