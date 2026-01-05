@@ -1,8 +1,9 @@
 import numpy as np
 import zmq
 
+from jarvis.core.QuitJarvis import QuitJarvis
 from shared.Jarvis import jarvis
-from shared.utils import Warn
+from shared.utils import Warn, STOP_SIGNAL
 
 
 def transcribe_command(audio_buffer: np.ndarray):
@@ -11,7 +12,10 @@ def transcribe_command(audio_buffer: np.ndarray):
     """
     try:
         jarvis.stt_service_client.send(audio_buffer.tobytes())
-        return jarvis.stt_service_client.recv_string()
+        return_text = jarvis.stt_service_client.recv_string()
+        if STOP_SIGNAL in return_text:
+            raise QuitJarvis()
+        return return_text
     except zmq.error.Again:  # timeout exception
         # Log a specific error message
         Warn("ERROR: Speech to text service did not respond within timeout!")

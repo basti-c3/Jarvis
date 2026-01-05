@@ -1,7 +1,7 @@
 import os
 import yaml
 from dotenv import load_dotenv
-from paths import env_config_path
+from jarvis.paths import env_config_path
 
 
 def load_config():

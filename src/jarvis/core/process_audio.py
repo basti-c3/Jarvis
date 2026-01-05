@@ -4,14 +4,15 @@ import traceback
 import numpy as np
 from collections import deque
 
-import winsound
-
 import shared.stt_config as config
-from core.play_wakeword_sound import play_wakeword_sound
-from core.process_command import record_command
+from jarvis.core.QuitJarvis import QuitJarvis
+from jarvis.core.play_wakeword_sound import play_wakeword_sound
+from jarvis.core.process_command import record_command
+from jarvis.paths import JARVIS_AWAKEN_PATH, JARVIS_SHUTDOWN_PATH
 from shared.Jarvis import jarvis
 from shared.stop_event import stop_event
-from shared.utils import Warn
+from shared.utils import Warn, STOP_SIGNAL
+from jarvis.utils import play_audio_file
 
 
 def continuous_processing(test_command=None):
@@ -51,7 +52,7 @@ def continuous_processing(test_command=None):
 
                 if keyword_index >= 0:
                     print("Wake word detected!")
-                    play_wakeword_sound("../../data/precalculated_jarvis_audios/yes.wav")
+                    play_wakeword_sound(JARVIS_AWAKEN_PATH)
                     is_recording_command = True
 
                     # How long the assistant audio is (in seconds)
@@ -74,6 +75,8 @@ def continuous_processing(test_command=None):
                                                                                                   command_pause_buffer,
                                                                                                   audio_chunk.flatten(),
                                                                                                   test_command)
+                except QuitJarvis:
+                    raise KeyboardInterrupt()
                 except Exception as error:
                     command_finished = True  # Reset buffers after error to start anew
                     Warn(str(error))
@@ -87,6 +90,12 @@ def continuous_processing(test_command=None):
                         command_pause_buffer = np.array([], dtype=np.int16)
         except queue.Empty:
             continue  # Continue if the queue is empty
+        except KeyboardInterrupt:
+            play_audio_file(JARVIS_SHUTDOWN_PATH)
+            jarvis.stt_service_client.send(STOP_SIGNAL.encode("utf-8"))
+            jarvis.tts_service_client.send_string(STOP_SIGNAL)
+            print("Jarvis stopped.")
+            break
         except Exception as e:
             print(f"Error recognizing vosk_model: {e}")
             traceback.print_exc()

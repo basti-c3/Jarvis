@@ -1,5 +1,5 @@
-from mqtt.MqttCommandTypes import MqttCommandType
-from mqtt.MqttService import MqttService
+from jarvis.mqtt.MqttCommandTypes import MqttCommandType
+from jarvis.mqtt.MqttService import MqttService
 
 
 class MqttCommand:

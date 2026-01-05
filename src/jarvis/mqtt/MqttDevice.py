@@ -2,8 +2,8 @@ import traceback
 
 from paho.mqtt.client import Client
 
-from mqtt.MqttError import MqttError
-from mqtt.mqtt_utils import *
+from jarvis.mqtt.MqttError import MqttError
+from jarvis.mqtt.mqtt_utils import *
 from shared.utils import Warn
 
 

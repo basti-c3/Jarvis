@@ -1,12 +1,12 @@
 import numpy as np
 
 import shared.stt_config as config
-from core.transcribe_command import transcribe_command
-from mqtt.MqttCommand import MqttCommand
-from mqtt.MqttCommandTypes import MqttCommandType
-from spotify.SpotifyCommandTypes import SpotifyCommandType
+from jarvis.core.transcribe_command import transcribe_command
+from jarvis.mqtt.MqttCommand import MqttCommand
+from jarvis.mqtt.MqttCommandTypes import MqttCommandType
+from jarvis.spotify.SpotifyCommandTypes import SpotifyCommandType
 
-from spotify.SpotifyCommand import SpotifyCommand
+from jarvis.spotify.SpotifyCommand import SpotifyCommand
 
 
 def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chunk: np.array, test_command=None):

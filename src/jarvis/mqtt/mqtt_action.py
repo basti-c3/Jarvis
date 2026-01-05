@@ -1,5 +1,5 @@
-from mqtt.MqttError import MqttError
-from mqtt.mqtt_utils import raise_mqtt_response_error
+from jarvis.mqtt.MqttError import MqttError
+from jarvis.mqtt.mqtt_utils import raise_mqtt_response_error
 from shared.Jarvis import jarvis
 from shared.utils import Warn
 

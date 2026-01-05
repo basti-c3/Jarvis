@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from core.process_command import process_command
+from jarvis.core.process_command import process_command
 
 
 class TestMqttBasicCommand:

@@ -1,5 +1,5 @@
 from shared.Jarvis import jarvis
-from mqtt.mqtt_action import mqtt_action
+from jarvis.mqtt.mqtt_action import mqtt_action
 
 
 class MqttService:

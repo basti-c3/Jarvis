@@ -8,9 +8,9 @@ import base64
 
 from dotenv import load_dotenv
 
-from paths import spotify_base_url, spotify_token_url, spotify_redirect_url, spotify_auth_url, SPOTIFY_TOKEN_DIR_PATH
-from spotify.ResponseError import ResponseError
-from spotify.spotify_utils import print_warning_response_json_if_possible
+from jarvis.paths import spotify_base_url, spotify_token_url, spotify_redirect_url, spotify_auth_url, SPOTIFY_TOKEN_DIR_PATH
+from jarvis.spotify.ResponseError import ResponseError
+from jarvis.spotify.spotify_utils import print_warning_response_json_if_possible
 from shared.utils import *
 
 

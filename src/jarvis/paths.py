@@ -1,12 +1,14 @@
 from pathlib import Path
 
-WAKE_WORD_PATH = "settings/Jarvis_en_windows_v4_0_0.ppn"
 spotify_base_url = "https://api.spotify.com/v1"
 spotify_token_url = "https://accounts.spotify.com/api/token"
 spotify_redirect_url = 'http://localhost:3000/callback'
 spotify_auth_url = 'https://accounts.spotify.com/authorize'
 BASE_DIR: Path = Path(__file__).resolve().parents[2]
 SRC_DIR: Path = BASE_DIR / "src"
+WAKE_WORD_PATH: Path = SRC_DIR / "jarvis" / "settings/Jarvis_en_windows_v4_0_0.ppn"
+JARVIS_AWAKEN_PATH: Path = BASE_DIR / "data/precalculated_jarvis_audios/yes.wav"
+JARVIS_SHUTDOWN_PATH: Path = BASE_DIR / "data/precalculated_jarvis_audios/shuttingdowngoodbyesir.wav"
 RESOURCE_DIR: Path = BASE_DIR / "src" / "resources"
 SPOTIFY_TOKEN_DIR_PATH = str(RESOURCE_DIR / "spotify_tokens")
 STT_MODEL_PATH = str(BASE_DIR / "models" / "vosk-model-small-en-us-0.15")

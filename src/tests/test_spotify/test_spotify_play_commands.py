@@ -1,6 +1,6 @@
 import pytest
-from spotify.SpotifyCommand import SpotifyCommand
-from spotify.SpotifyCommandTypes import PlayType
+from jarvis.spotify.SpotifyCommand import SpotifyCommand
+from jarvis.spotify.SpotifyCommandTypes import PlayType
 
 
 class TestSpotifyPlayCommand:

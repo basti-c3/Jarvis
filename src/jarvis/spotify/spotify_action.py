@@ -1,6 +1,6 @@
 from shared.Jarvis import jarvis
-from spotify.ResponseError import ResponseError
-from spotify.spotify_utils import raise_spotify_response_error
+from jarvis.spotify.ResponseError import ResponseError
+from jarvis.spotify.spotify_utils import raise_spotify_response_error
 
 
 def spotify_action(success_message: str = None):

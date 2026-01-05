@@ -1,7 +1,7 @@
 from shared.Jarvis import jarvis
-from spotify.SpotifyCommandTypes import PlayType
-from spotify.SpotifyApiCommunicationService import SpotifyApiCommunicationService
-from spotify.spotify_action import spotify_action
+from jarvis.spotify.SpotifyCommandTypes import PlayType
+from jarvis.spotify.SpotifyApiCommunicationService import SpotifyApiCommunicationService
+from jarvis.spotify.spotify_action import spotify_action
 from shared.utils import *
 
 

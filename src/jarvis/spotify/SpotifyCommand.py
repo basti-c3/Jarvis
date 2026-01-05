@@ -1,6 +1,6 @@
-from spotify.SpotifyCommandTypes import PlayType, SpotifyCommandType, play_types
-from spotify.SpotifyService import SpotifyService
-from spotify.spotify_utils import *
+from jarvis.spotify.SpotifyCommandTypes import PlayType, SpotifyCommandType, play_types
+from jarvis.spotify.SpotifyService import SpotifyService
+from jarvis.spotify.spotify_utils import *
 
 
 class SpotifyCommand:
@@ -15,7 +15,7 @@ class SpotifyCommand:
     def extract(self):
         search_str = preprocess_spotify_search_string(self.command_str)  # For example "hello from adele"
 
-        if any(word in search_str for word in self.artist_split_words):  # 'from spotify' would be removed already
+        if any(word in search_str for word in self.artist_split_words):  # 'from jarvis.spotify' would be removed already
             search_str, artist_str = extract_artist_from_search_string(search_str, self.artist_split_words)
             # "hello from adele" --> ["hello", "adele"]
             self.search_str = search_str

@@ -1,8 +1,8 @@
 import threading
 import sounddevice as sd
 
-from core.audio_callback import audio_callback
-from core.process_audio import continuous_processing
+from jarvis.core.audio_callback import audio_callback
+from jarvis.core.process_audio import continuous_processing
 from shared.stop_event import stop_event
 from shared import stt_config as config
 

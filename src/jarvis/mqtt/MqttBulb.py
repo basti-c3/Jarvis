@@ -1,4 +1,4 @@
-from mqtt.MqttDevice import MqttDevice
+from jarvis.mqtt.MqttDevice import MqttDevice
 
 
 class MqttBulb(MqttDevice):
