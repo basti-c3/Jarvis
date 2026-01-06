@@ -6,6 +6,7 @@ from jarvis.core.process_audio import continuous_processing
 from shared.stop_event import stop_event
 from shared import stt_config as config
 from shared.utils import Warn
+from jarvis.utils import find_anker_usb_mic
 
 
 def run_recognition(command: str = None):
@@ -19,7 +20,7 @@ def run_recognition(command: str = None):
     recognition_thread.start()
 
     try:
-        device_index, samplerate = find_usb_mic()
+        device_index, samplerate = find_anker_usb_mic()
         print("Using device index:", device_index, "with samplerate:", samplerate)
         with sd.InputStream(
             device=device_index,
