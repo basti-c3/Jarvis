@@ -121,7 +121,7 @@ class Jarvis:
             device_index, samplerate = find_anker_usb_mic()
             self._audio_mic_sample_rate = samplerate
             self._anker_mic_device = device_index
-        return self._anker_mic_device @ property
+        return self._anker_mic_device
 
     @property
     def anker_speaker_device(self):
