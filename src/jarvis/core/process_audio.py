@@ -87,7 +87,7 @@ def continuous_processing(test_command=None):
         except queue.Empty:
             continue  # Continue if the queue is empty
         except KeyboardInterrupt:
-            play_audio_file(JARVIS_SHUTDOWN_PATH, jarvis.audio_device_sample_rate)
+            play_audio_file(JARVIS_SHUTDOWN_PATH,  jarvis.anker_speaker_device, jarvis.audio_speaker_sample_rate)
             jarvis.stt_service_client.send(STOP_SIGNAL.encode("utf-8"))
             jarvis.tts_service_client.send_string(STOP_SIGNAL)
             print("Jarvis stopped.")

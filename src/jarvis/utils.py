@@ -4,11 +4,11 @@ import soundfile as sf
 from scipy.signal import resample_poly
 
 
-def play_audio_file(file_path, play_samplerate=16000):
+def play_audio_file(file_path, out_device, play_samplerate):
     data, samplerate = sf.read(file_path, dtype='float32')
     if samplerate != play_samplerate:
         data = resample_audio(data, samplerate, play_samplerate)
-    sd.play(data, play_samplerate)
+    sd.play(data, play_samplerate, device=out_device)
     sd.wait()  # Wait until playback is done
 
 

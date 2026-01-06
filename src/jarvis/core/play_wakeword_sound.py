@@ -10,7 +10,7 @@ def play_wakeword_sound(file_path: str):
     """
 
     def _play():
-        play_audio_file(file_path, jarvis.audio_device_sample_rate)
+        play_audio_file(file_path, jarvis.anker_speaker_device, jarvis.audio_speaker_sample_rate)
 
     # Run in a separate thread so it doesn't block your main loop
     threading.Thread(target=_play, daemon=True).start()

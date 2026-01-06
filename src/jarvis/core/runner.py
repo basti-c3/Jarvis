@@ -21,12 +21,12 @@ def run_recognition(command: str = None):
 
     try:
         with sd.InputStream(
-                device=jarvis.anker_audio_device,
-                samplerate=jarvis.audio_device_sample_rate,
+                device=jarvis.anker_mic_device,
+                samplerate=jarvis.audio_mic_sample_rate,
                 channels=config.CHANNELS,
                 dtype='int16',
                 callback=audio_callback,
-                blocksize=int(config.BUFFER_DURATION * jarvis.audio_device_sample_rate),
+                blocksize=int(config.BUFFER_DURATION * jarvis.audio_mic_sample_rate),
         ):
             stop_event.wait()
     except KeyboardInterrupt:

@@ -10,7 +10,7 @@ def audio_callback(indata, frames, time, status):
     # Flatten and convert to int16
     pcm = indata[:, 0].astype(np.int16)
 
-    pcm_resampled = resample_audio(pcm, jarvis.audio_device_sample_rate, config.AUDIO_RATE)
+    pcm_resampled = resample_audio(pcm, jarvis.audio_mic_sample_rate, config.AUDIO_RATE)
 
     # Split into Porcupine-sized frames
     frame_len = jarvis.wake_word.frame_length()

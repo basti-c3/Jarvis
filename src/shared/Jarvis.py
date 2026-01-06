@@ -1,7 +1,7 @@
 import zmq
 
 from shared.ipc import client
-from shared.utils import Warn, find_anker_usb_mic
+from shared.utils import Warn, find_anker_usb_mic, find_anker_usb_speaker
 
 
 class Jarvis:
@@ -18,8 +18,10 @@ class Jarvis:
         self._stt_service_client = None
         self._tts_service_client = None
 
-        self._anker_audio_device = None
-        self._audio_device_sample_rate = None
+        self._anker_mic_device = None
+        self._audio_mic_sample_rate = None
+        self._audio_speaker_sample_rate = None
+        self._anker_speaker_device = None
 
     @property
     def audio_queue(self):
@@ -106,20 +108,36 @@ class Jarvis:
         return self._tts_service_client
 
     @property
-    def audio_device_sample_rate(self):
-        if self._audio_device_sample_rate is None:
+    def audio_mic_sample_rate(self):
+        if self._audio_mic_sample_rate is None:
             device_index, samplerate = find_anker_usb_mic()
-            self._audio_device_sample_rate = samplerate
-            self._anker_audio_device = device_index
-        return self._audio_device_sample_rate
+            self._audio_mic_sample_rate = samplerate
+            self._anker_mic_device = device_index
+        return self._audio_mic_sample_rate
 
     @property
-    def anker_audio_device(self):
-        if self._anker_audio_device is None:
+    def anker_mic_device(self):
+        if self._anker_mic_device is None:
             device_index, samplerate = find_anker_usb_mic()
-            self._audio_device_sample_rate = samplerate
-            self._anker_audio_device = device_index
-        return self._anker_audio_device
+            self._audio_mic_sample_rate = samplerate
+            self._anker_mic_device = device_index
+        return self._anker_mic_device @ property
+
+    @property
+    def anker_speaker_device(self):
+        if self._anker_speaker_device is None:
+            device_index, samplerate = find_anker_usb_speaker()
+            self._audio_speaker_sample_rate = samplerate
+            self._anker_speaker_device = device_index
+        return self._anker_speaker_device
+
+    @property
+    def audio_speaker_sample_rate(self):
+        if self._audio_speaker_sample_rate is None:
+            device_index, samplerate = find_anker_usb_speaker()
+            self._audio_speaker_sample_rate = samplerate
+            self._anker_speaker_device = device_index
+        return self._audio_speaker_sample_rate
 
     def say(self, text: str):
         try:
