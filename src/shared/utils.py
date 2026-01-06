@@ -17,4 +17,5 @@ def find_anker_usb_mic(name_substring="Anker"):
     for i, dev in enumerate(devices):
         if dev['max_input_channels'] > 0 and name_substring.lower() in dev['name'].lower():
             return i, dev['default_samplerate']
+    Warn("No Anker device found! Is it plugged in?")
     return None, None
