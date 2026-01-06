@@ -9,18 +9,10 @@ from jarvis.spotify.SpotifyCommandTypes import SpotifyCommandType
 from jarvis.spotify.SpotifyCommand import SpotifyCommand
 
 
-def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chunk: np.array, test_command=None):
+def record_command(audio_buffer: np.array, new_audio_chunk: np.array, detected_silence_time: int, test_command=None):
     audio_buffer = np.concatenate((audio_buffer, new_audio_chunk))
-    pause_buffer = np.concatenate((pause_buffer, new_audio_chunk))
 
-    pause_buffer_long_enough = len(
-        pause_buffer) > config.AUDIO_RATE * config.COMMAND_END_PAUSE_LENGTH
-    is_end_of_command = pause_buffer_long_enough and np.mean(
-        np.abs(pause_buffer)) < config.SILENCE_THRESHOLD
-
-    if pause_buffer_long_enough:
-        # Remove the first audio chunk to maintain the same length of the pause_buffer_long_enough
-        pause_buffer = pause_buffer[len(new_audio_chunk):]
+    is_end_of_command = detected_silence_time >= config.RESET_AUDIO_BUFFER_AFTER
 
     command_length_exceeded = len(audio_buffer) > config.AUDIO_RATE * config.MAX_COMMAND_LENGTH
     if is_end_of_command or command_length_exceeded:
@@ -36,8 +28,8 @@ def record_command(audio_buffer: np.array, pause_buffer: np.array, new_audio_chu
 
         if command_str is not None:
             process_command(command_str)  # Process command
-        return True, audio_buffer, pause_buffer
-    return False, audio_buffer, pause_buffer
+        return True, audio_buffer
+    return False, audio_buffer
 
 
 def process_command(command_str):

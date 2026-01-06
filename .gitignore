@@ -11,7 +11,7 @@
 !/data/Readme.md
 
 # Ignore TTS data and images
-/src/tts//TTS/images/*
-/src/tts/TTS/tests/data/*
+/TTS/images/*
+/TTS/tests/data/*
 
 /src/tests/manual_tests/*

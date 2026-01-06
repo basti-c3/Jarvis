@@ -1,0 +1,27 @@
+# Core
+pyzmq
+paho-mqtt
+python-dotenv
+PyYAML
+vosk
+pvporcupine
+sounddevice
+soundfile
+
+# TTS
+torch
+torchaudio
+torchvision
+tts==0.22.0
+transformers==4.39.3
+librosa
+mutagen
+pydub
+coqpit
+
+# NLP
+spacy
+nltk
+gruut
+num2words
+inflect

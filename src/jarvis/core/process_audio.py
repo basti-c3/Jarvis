@@ -25,7 +25,6 @@ def continuous_processing(test_command=None):
     ignore_initial_pause_time = 0 # Set at keyword detection
     detected_silence_time = 0
     command_audio_buffer = np.array([], dtype=np.int16)
-    command_pause_buffer = np.array([], dtype=np.int16)
     pre_roll_buffer = deque(maxlen=config.PRE_ROLL_SAMPLES)
 
     if test_command:
@@ -42,7 +41,7 @@ def continuous_processing(test_command=None):
                 # Skip counting silence for the initial assistant audio
                 ignore_initial_pause_time -= config.BUFFER_DURATION
                 detected_silence_time = 0
-            if np.mean(np.abs(audio_chunk)) < config.SILENCE_THRESHOLD:
+            elif np.mean(np.abs(audio_chunk)) < config.SILENCE_THRESHOLD:
                 detected_silence_time += config.BUFFER_DURATION
             else:
                 detected_silence_time = 0
@@ -52,28 +51,26 @@ def continuous_processing(test_command=None):
 
                 if keyword_index >= 0:
                     print("Wake word detected!")
-                    play_wakeword_sound(JARVIS_AWAKEN_PATH)
+                    play_wakeword_sound(str(JARVIS_AWAKEN_PATH))
                     is_recording_command = True
 
                     # How long the assistant audio is (in seconds)
-                    ignore_initial_pause_time = 1.2  # adjust to length of your "Yes?" sound
+                    ignore_initial_pause_time = config.INITIAL_PAUSE_TIME  # adjust to length of your "Yes?" sound
 
                     # Include pre-roll audio
                     command_audio_buffer = np.fromiter(
                         pre_roll_buffer, dtype=np.int16
                     )
-                    command_pause_buffer = command_audio_buffer.copy()
 
-                elif not is_recording_command and detected_silence_time >= config.RESET_AUDIO_BUFFER_AFTER:
+                if not is_recording_command and detected_silence_time >= config.RESET_AUDIO_BUFFER_AFTER:
                     detected_silence_time = 0
                     pre_roll_buffer.clear()
                     command_audio_buffer = np.array([], dtype=np.int16)
-                    command_pause_buffer = np.array([], dtype=np.int16)
             else:
                 try:
-                    command_finished, command_audio_buffer, command_pause_buffer = record_command(command_audio_buffer,
-                                                                                                  command_pause_buffer,
+                    command_finished, command_audio_buffer = record_command(command_audio_buffer,
                                                                                                   audio_chunk.flatten(),
+                                                                                                  detected_silence_time,
                                                                                                   test_command)
                 except QuitJarvis:
                     raise KeyboardInterrupt()
@@ -87,7 +84,6 @@ def continuous_processing(test_command=None):
                         is_recording_command = False
                         pre_roll_buffer.clear()
                         command_audio_buffer = np.array([], dtype=np.int16)
-                        command_pause_buffer = np.array([], dtype=np.int16)
         except queue.Empty:
             continue  # Continue if the queue is empty
         except KeyboardInterrupt:
@@ -102,4 +98,3 @@ def continuous_processing(test_command=None):
             # Reset buffers and command
             is_recording_command = False
             command_audio_buffer = np.array([], dtype=np.int16)
-            command_pause_buffer = np.array([], dtype=np.int16)

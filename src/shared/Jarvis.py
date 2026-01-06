@@ -35,14 +35,14 @@ class Jarvis:
     @property
     def stt(self):
         if self._stt is None:
-            from stt.JarvisSTT import JarvisSTT
+            from stt_service.JarvisSTT import JarvisSTT
             self._stt = JarvisSTT()
         return self._stt
 
     @property
     def tts(self):
         if self._tts is None:
-            from tts.JarvisTTS import JarvisTTS
+            from tts_service.JarvisTTS import JarvisTTS
             self._tts = JarvisTTS()
         return self._tts
 
