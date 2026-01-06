@@ -1,7 +1,7 @@
 import threading
 import sounddevice as sd
 
-from jarvis.core.audio_callback import audio_callback
+from jarvis.core.audio_callback import make_audio_callback
 from jarvis.core.process_audio import continuous_processing
 from shared.stop_event import stop_event
 from shared import stt_config as config
@@ -21,15 +21,13 @@ def run_recognition(command: str = None):
 
     try:
         mic_index, samplerate = find_anker_usb_mic()
-        if config.AUDIO_RATE != samplerate:
-            Warn(f"Warning: Sample rate from microphone is {samplerate} but we expected {config.AUDIO_RATE}. We rewrite this rate now, which might cause subsequent errors!")
-            config.AUDIO_RATE = samplerate
+        callback = make_audio_callback(samplerate)
         with sd.InputStream(
             device=mic_index,
-            samplerate=samplerate,
+            samplerate=config.AUDIO_RATE,
             channels=config.CHANNELS,
             dtype='int16',
-            callback=audio_callback,
+            callback=callback,
             blocksize=int(config.BUFFER_DURATION * config.AUDIO_RATE),
         ):
             stop_event.wait()
