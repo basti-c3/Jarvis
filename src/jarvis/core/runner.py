@@ -1,12 +1,12 @@
 import threading
 import sounddevice as sd
 
-from jarvis.core.audio_callback import make_audio_callback
+from jarvis.core.audio_callback import audio_callback
 from jarvis.core.process_audio import continuous_processing
 from shared.stop_event import stop_event
 from shared import stt_config as config
 from shared.utils import Warn
-from jarvis.utils import find_anker_usb_mic
+from shared.Jarvis import jarvis
 
 
 def run_recognition(command: str = None):
@@ -20,15 +20,13 @@ def run_recognition(command: str = None):
     recognition_thread.start()
 
     try:
-        mic_index, input_samplerate = find_anker_usb_mic()
-        callback = make_audio_callback(input_samplerate)
         with sd.InputStream(
-            device=mic_index,
-            samplerate=input_samplerate,
-            channels=config.CHANNELS,
-            dtype='int16',
-            callback=callback,
-            blocksize=int(config.BUFFER_DURATION * input_samplerate),
+                device=jarvis.anker_audio_device,
+                samplerate=jarvis.audio_device_sample_rate,
+                channels=config.CHANNELS,
+                dtype='int16',
+                callback=audio_callback,
+                blocksize=int(config.BUFFER_DURATION * jarvis.audio_device_sample_rate),
         ):
             stop_event.wait()
     except KeyboardInterrupt:

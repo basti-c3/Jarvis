@@ -1,7 +1,7 @@
 import zmq
 
 from shared.ipc import client
-from shared.utils import Warn
+from shared.utils import Warn, find_anker_usb_mic
 
 
 class Jarvis:
@@ -17,6 +17,9 @@ class Jarvis:
 
         self._stt_service_client = None
         self._tts_service_client = None
+
+        self._anker_audio_device = None
+        self._audio_device_sample_rate = None
 
     @property
     def audio_queue(self):
@@ -101,6 +104,22 @@ class Jarvis:
             self._tts_service_client = client("tcp://127.0.0.1:5556", stream_pattern=zmq.REQ)
             self._tts_service_client.setsockopt(zmq.RCVTIMEO, 3000)
         return self._tts_service_client
+
+    @property
+    def audio_device_sample_rate(self):
+        if self._audio_device_sample_rate is None:
+            device_index, samplerate = find_anker_usb_mic()
+            self._audio_device_sample_rate = samplerate
+            self._anker_audio_device = device_index
+        return self._audio_device_sample_rate
+
+    @property
+    def anker_audio_device(self):
+        if self._anker_audio_device is None:
+            device_index, samplerate = find_anker_usb_mic()
+            self._audio_device_sample_rate = samplerate
+            self._anker_audio_device = device_index
+        return self._anker_audio_device
 
     def say(self, text: str):
         try:
