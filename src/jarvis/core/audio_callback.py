@@ -9,7 +9,12 @@ def audio_callback(indata, frames, time, status):
     """Callback function for receiving audio data."""
     # Flatten and convert to int16
     pcm = indata[:, 0].astype(np.int16)
+    if np.max(np.abs(pcm)) < 100:
+        print(f"very low mic signal {np.max(np.abs(pcm))}")
+    else:
+        print("mic level:", np.max(np.abs(pcm)))
     pcm_resampled = resample_audio(pcm, config.AUDIO_RATE, jarvis.audio_device_sample_rate)
+
 
     # Split into Porcupine-sized frames
     frame_len = jarvis.wake_word.frame_length()
