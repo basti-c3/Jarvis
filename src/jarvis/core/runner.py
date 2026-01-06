@@ -19,10 +19,11 @@ def run_recognition(command: str = None):
     recognition_thread.start()
 
     try:
-        print(sd.query_devices())
+        device_index, samplerate = find_usb_mic()
+        print("Using device index:", device_index, "with samplerate:", samplerate)
         with sd.InputStream(
-            device=0,
-            samplerate=config.AUDIO_RATE,
+            device=device_index,
+            samplerate=samplerate,
             channels=config.CHANNELS,
             dtype='int16',
             callback=audio_callback,
