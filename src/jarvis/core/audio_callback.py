@@ -1,7 +1,7 @@
 import numpy as np
 
 from shared.Jarvis import jarvis
-from jarvis.utils import resample_audio
+from shared.utils import resample_audio
 from shared import stt_config as config
 
 
