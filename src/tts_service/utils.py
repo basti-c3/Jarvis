@@ -37,7 +37,7 @@ def play_audio(filename):
         sd.play(
             data,
             samplerate=samplerate,
-            device=jarvis.device_index,
+            device=jarvis.anker_speaker_device,
             blocking=True,
         )
     else:
