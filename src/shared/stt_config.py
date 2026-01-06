@@ -15,3 +15,7 @@ PRE_ROLL_SAMPLES = int(PRE_ROLL_SECONDS * AUDIO_RATE)
 INITIAL_PAUSE_TIME = 2
 DEV = True
 SetLogLevel(-1)  # To remove all the annoying logs
+
+# Audio device plugged into which ports
+MIC_DEVICE = 2
+MIC_SUB_DEVICE = 0
