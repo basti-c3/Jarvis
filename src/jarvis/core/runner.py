@@ -20,15 +20,15 @@ def run_recognition(command: str = None):
     recognition_thread.start()
 
     try:
-        mic_index, samplerate = find_anker_usb_mic()
-        callback = make_audio_callback(samplerate)
+        mic_index, input_samplerate = find_anker_usb_mic()
+        callback = make_audio_callback(input_samplerate)
         with sd.InputStream(
             device=mic_index,
-            samplerate=config.AUDIO_RATE,
+            samplerate=input_samplerate,
             channels=config.CHANNELS,
             dtype='int16',
             callback=callback,
-            blocksize=int(config.BUFFER_DURATION * config.AUDIO_RATE),
+            blocksize=int(config.BUFFER_DURATION * input_samplerate),
         ):
             stop_event.wait()
     except KeyboardInterrupt:
