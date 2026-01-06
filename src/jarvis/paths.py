@@ -1,3 +1,4 @@
+import platform
 from pathlib import Path
 
 spotify_base_url = "https://api.spotify.com/v1"
@@ -6,7 +7,15 @@ spotify_redirect_url = 'http://localhost:3000/callback'
 spotify_auth_url = 'https://accounts.spotify.com/authorize'
 BASE_DIR: Path = Path(__file__).resolve().parents[2]
 SRC_DIR: Path = BASE_DIR / "src"
-WAKE_WORD_PATH: Path = SRC_DIR / "jarvis" / "settings/Jarvis_en_windows_v4_0_0.ppn"
+
+machine = platform.machine().lower()
+if machine in ("aarch64", "arm64", "armv7l"):
+    # Raspberry Pi / ARM
+    WAKE_WORD_PATH = SRC_DIR / "jarvis" / "settings" / "Jarvis_en_raspberry-pi_v4_0_0.ppn"
+else:
+    # Windows
+    WAKE_WORD_PATH = SRC_DIR / "jarvis" / "settings" / "Jarvis_en_windows_v4_0_0.ppn"
+
 PRECAL_AUDIOS_PATH: Path = BASE_DIR / "data/precalculated_jarvis_audios"
 JARVIS_AWAKEN_PATH: Path = PRECAL_AUDIOS_PATH / "yes.wav"
 JARVIS_SHUTDOWN_PATH: Path = PRECAL_AUDIOS_PATH / "shuttingdowngoodbyesir.wav"

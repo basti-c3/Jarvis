@@ -20,10 +20,12 @@ def run_recognition(command: str = None):
     recognition_thread.start()
 
     try:
-        device_index, samplerate = find_anker_usb_mic()
-        print("Using device index:", device_index, "with samplerate:", samplerate)
+        mic_index, samplerate = find_anker_usb_mic()
+        if config.AUDIO_RATE != samplerate:
+            Warn(f"Warning: Sample rate from microphone is {samplerate} but we expected {config.AUDIO_RATE}. We rewrite this rate now, which might cause subsequent errors!")
+            config.AUDIO_RATE = samplerate
         with sd.InputStream(
-            device=device_index,
+            device=mic_index,
             samplerate=samplerate,
             channels=config.CHANNELS,
             dtype='int16',
