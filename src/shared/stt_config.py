@@ -17,5 +17,4 @@ DEV = True
 SetLogLevel(-1)  # To remove all the annoying logs
 
 # Audio device plugged into which ports
-MIC_DEVICE = 2
-MIC_SUB_DEVICE = 0
+AUDIO_DEVICE_NAME = 'plughw:2,0'

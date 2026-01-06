@@ -20,7 +20,7 @@ def run_recognition(command: str = None):
 
     try:
         with sd.InputStream(
-            device=(config.MIC_DEVICE, config.MIC_SUB_DEVICE),
+            device=config.AUDIO_DEVICE_NAME,
             samplerate=config.AUDIO_RATE,
             channels=config.CHANNELS,
             dtype='int16',
