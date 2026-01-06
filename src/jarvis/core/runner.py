@@ -19,8 +19,9 @@ def run_recognition(command: str = None):
     recognition_thread.start()
 
     try:
+        print(sd.query_devices())
         with sd.InputStream(
-            device=config.AUDIO_DEVICE_NAME,
+            device=0,
             samplerate=config.AUDIO_RATE,
             channels=config.CHANNELS,
             dtype='int16',
