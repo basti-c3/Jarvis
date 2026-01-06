@@ -1,8 +1,4 @@
-import platform
 import threading
-import soundfile as sf
-import sounddevice as sd
-import os
 import torch
 
 from shared.Jarvis import jarvis
@@ -12,7 +8,7 @@ from TTS.config.shared_configs import BaseDatasetConfig
 
 from TTS.api import TTS
 from jarvis.paths import XTTS_MODEL_PATH, PRECAL_AUDIOS_PATH
-from shared.utils import Warn, find_anker_usb_mic
+from shared.utils import Warn, play_audio_file
 
 
 def load_xtts_model_from_checkpoint():
@@ -26,22 +22,7 @@ def load_xtts_model_from_checkpoint():
 
 def play_audio(filename):
     filepath = str(PRECAL_AUDIOS_PATH / f"{filename}.wav")
-    if platform.system() == "Windows":
-        import winsound
-        # Uses built-in Windows sound player
-        if not os.path.exists(filepath):
-            raise FileNotFoundError(f"ERROR: No audio file in {os.path.abspath(filepath)} found to play.")
-        winsound.PlaySound(filepath, winsound.SND_FILENAME | winsound.SND_ASYNC)
-    elif platform.system() == "Linux":
-        data, samplerate = sf.read(str(filepath), dtype="float32")
-        sd.play(
-            data,
-            samplerate=samplerate,
-            device=jarvis.anker_speaker_device,
-            blocking=True,
-        )
-    else:
-        raise SystemError(f"Please configure playing audio for non-configured systems before running the code. System: {platform.system()}")
+    play_audio_file(filepath, jarvis.anker_speaker_device, jarvis.audio_speaker_sample_rate)
 
 
 def say_with_model(self, text):

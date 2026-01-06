@@ -1,6 +1,6 @@
 import threading
 
-from jarvis.utils import play_audio_file
+from shared.utils import play_audio_file
 from shared.Jarvis import jarvis
 
 

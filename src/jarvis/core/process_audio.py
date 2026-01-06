@@ -12,7 +12,7 @@ from jarvis.paths import JARVIS_AWAKEN_PATH, JARVIS_SHUTDOWN_PATH
 from shared.Jarvis import jarvis
 from shared.stop_event import stop_event
 from shared.utils import Warn, STOP_SIGNAL
-from jarvis.utils import play_audio_file
+from shared.utils import play_audio_file
 
 
 def continuous_processing(test_command=None):
