@@ -1,6 +1,8 @@
+import platform
+
 import numpy as np
-import sounddevice as sd
 import soundfile as sf
+import sounddevice as sd
 from scipy.signal import resample_poly
 
 
@@ -21,7 +23,10 @@ def find_anker_usb_mic(name_substring="Anker"):
         if dev['max_input_channels'] > 0 and name_substring.lower() in dev['name'].lower():
             return i, dev['default_samplerate']
     Warn("No Anker mic found! Is it plugged in?")
-    return None, None
+    # Check if running on Windows
+    if platform.system() != "Windows":
+        raise RuntimeError("This code only works on Windows. Detected OS: " + platform.system())
+    return 1, 48000
 
 
 def find_anker_usb_speaker(name_substring="Anker"):
@@ -30,7 +35,10 @@ def find_anker_usb_speaker(name_substring="Anker"):
         if dev['max_output_channels'] > 0 and name_substring.lower() in dev['name'].lower():
             return i, dev['default_samplerate']
     Warn("No Anker speaker found! Is it plugged in?")
-    return None, None
+    # Check if running on Windows
+    if platform.system() != "Windows":
+        raise RuntimeError("This code only works on Windows. Detected OS: " + platform.system())
+    return 3, 48000
 
 
 def resample_audio(samples: np.ndarray, input_rate, output_rate, output_int16=True) -> np.ndarray:
@@ -54,6 +62,7 @@ def resample_audio(samples: np.ndarray, input_rate, output_rate, output_int16=Tr
 
 
 def play_audio_file(file_path, out_device, play_samplerate, volume=0.3):
+    sd.stop()
     data, samplerate = sf.read(file_path, dtype='float32')
     if samplerate != play_samplerate:
         data = resample_audio(data, samplerate, play_samplerate, output_int16=False)

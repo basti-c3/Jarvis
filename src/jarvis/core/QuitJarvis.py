@@ -1,2 +1,0 @@
-class QuitJarvis(Exception):
-    pass

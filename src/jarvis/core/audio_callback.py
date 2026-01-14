@@ -9,7 +9,6 @@ def audio_callback(indata, frames, time, status):
     """Callback function for receiving audio data."""
     # Flatten and convert to int16
     pcm = indata[:, 0].astype(np.int16)
-
     pcm_resampled = resample_audio(pcm, jarvis.audio_mic_sample_rate, config.AUDIO_RATE)
 
     # Split into Porcupine-sized frames

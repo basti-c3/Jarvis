@@ -5,13 +5,14 @@ import numpy as np
 from collections import deque
 
 import shared.stt_config as config
-from jarvis.core.QuitJarvis import QuitJarvis
+from core.services import send_stt_service, send_tts_service
+from jarvis.core.exceptions import *
 from jarvis.core.play_wakeword_sound import play_wakeword_sound
 from jarvis.core.process_command import record_command
 from jarvis.paths import JARVIS_AWAKEN_PATH, JARVIS_SHUTDOWN_PATH
 from shared.Jarvis import jarvis
 from shared.stop_event import stop_event
-from shared.utils import Warn, STOP_SIGNAL
+from shared.utils import Warn
 from shared.utils import play_audio_file
 
 
@@ -22,7 +23,7 @@ def continuous_processing(test_command=None):
      """
 
     is_recording_command = False
-    ignore_initial_pause_time = 0 # Set at keyword detection
+    ignore_initial_pause_time = 0  # Set at keyword detection
     detected_silence_time = 0
     command_audio_buffer = np.array([], dtype=np.int16)
     pre_roll_buffer = deque(maxlen=config.PRE_ROLL_SAMPLES)
@@ -69,11 +70,15 @@ def continuous_processing(test_command=None):
             else:
                 try:
                     command_finished, command_audio_buffer = record_command(command_audio_buffer,
-                                                                                                  audio_chunk.flatten(),
-                                                                                                  detected_silence_time,
-                                                                                                  test_command)
-                except QuitJarvis:
-                    raise KeyboardInterrupt()
+                                                                            audio_chunk.flatten(),
+                                                                            detected_silence_time,
+                                                                            test_command)
+                except QuitJarvis as e:
+                    raise QuitJarvis(e)
+                except SttServiceError as e:
+                    raise SttServiceError(e)
+                except TtsServiceError as e:
+                    raise TtsServiceError(e)
                 except Exception as error:
                     command_finished = True  # Reset buffers after error to start anew
                     Warn(str(error))
@@ -86,12 +91,17 @@ def continuous_processing(test_command=None):
                         command_audio_buffer = np.array([], dtype=np.int16)
         except queue.Empty:
             continue  # Continue if the queue is empty
-        except KeyboardInterrupt:
-            play_audio_file(JARVIS_SHUTDOWN_PATH,  jarvis.anker_speaker_device, jarvis.audio_speaker_sample_rate)
-            jarvis.stt_service_client.send(STOP_SIGNAL.encode("utf-8"))
-            jarvis.tts_service_client.send_string(STOP_SIGNAL)
-            print("Jarvis stopped.")
+        except QuitJarvis:
+            play_audio_file(JARVIS_SHUTDOWN_PATH, jarvis.anker_speaker_device, jarvis.audio_speaker_sample_rate)
+            send_stt_service(stop=True)
+            send_tts_service(stop=True)
+            Warn("Jarvis stopped.")
             break
+        except SttServiceError as e:
+            Warn(e)
+            jarvis.say("Sorry Sir, but the speech service is not responding.")
+        except TtsServiceError as e:
+            Warn(e)  # Don't say anything here, as that might create an infinite loop
         except Exception as e:
             print(f"Error recognizing vosk_model: {e}")
             traceback.print_exc()

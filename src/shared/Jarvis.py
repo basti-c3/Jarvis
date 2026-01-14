@@ -1,6 +1,6 @@
 import zmq
 
-from shared.ipc import client
+from core.services import send_tts_service
 from shared.utils import Warn, find_anker_usb_mic, find_anker_usb_speaker
 
 
@@ -14,9 +14,6 @@ class Jarvis:
 
         self._plugs = {}
         self._bulbs = None
-
-        self._stt_service_client = None
-        self._tts_service_client = None
 
         self._anker_mic_device = None
         self._audio_mic_sample_rate = None
@@ -36,13 +33,6 @@ class Jarvis:
             from jarvis.core.WakeWordEngine import WakeWordEngine
             self._wake_word = WakeWordEngine()
         return self._wake_word
-
-    @property
-    def stt(self):
-        if self._stt is None:
-            from stt_service.JarvisSTT import JarvisSTT
-            self._stt = JarvisSTT()
-        return self._stt
 
     @property
     def tts(self):
@@ -94,24 +84,13 @@ class Jarvis:
         return self._bulbs
 
     @property
-    def stt_service_client(self):
-        if self._stt_service_client is None:
-            self._stt_service_client = client("tcp://127.0.0.1:5555", stream_pattern=zmq.REQ)
-            self._stt_service_client.setsockopt(zmq.RCVTIMEO, 3000)
-        return self._stt_service_client
-
-    @property
-    def tts_service_client(self):
-        if self._tts_service_client is None:
-            self._tts_service_client = client("tcp://127.0.0.1:5556", stream_pattern=zmq.REQ)
-            self._tts_service_client.setsockopt(zmq.RCVTIMEO, 3000)
-        return self._tts_service_client
-
-    @property
     def audio_mic_sample_rate(self):
         if self._audio_mic_sample_rate is None:
             device_index, samplerate = find_anker_usb_mic()
-            self._audio_mic_sample_rate = samplerate
+            if samplerate >= 44000 and samplerate <= 48000:  # fix this range to 48000 to get less errors
+                self._audio_mic_sample_rate = 48000
+            else:
+                self._audio_mic_sample_rate = samplerate
             self._anker_mic_device = device_index
         return self._audio_mic_sample_rate
 
@@ -141,15 +120,10 @@ class Jarvis:
 
     def say(self, text: str):
         try:
-            self.tts_service_client.send_string(text)
-            self.tts_service_client.recv()
+            send_tts_service(text)
         except zmq.error.Again:  # timeout exception
             # Log a specific error message
             Warn("ERROR in TTS: Speech to text service did not respond within timeout!")
-
-    def reset_stt_service_client(self):
-        self.stt_service_client.close()
-        self._stt_service_client = client("tcp://127.0.0.1:5555", stream_pattern=zmq.REQ)
 
 
 jarvis = Jarvis()

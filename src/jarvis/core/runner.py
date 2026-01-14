@@ -1,4 +1,6 @@
 import threading
+import traceback
+
 import sounddevice as sd
 
 from jarvis.core.audio_callback import audio_callback
@@ -24,15 +26,17 @@ def run_recognition(command: str = None):
                 device=jarvis.anker_mic_device,
                 samplerate=jarvis.audio_mic_sample_rate,
                 channels=config.CHANNELS,
-                dtype='int16',
+                dtype='int16',  # Windows does not work with float32, it just silently doesnt call callback
                 callback=audio_callback,
                 blocksize=int(config.BUFFER_DURATION * jarvis.audio_mic_sample_rate),
         ):
             stop_event.wait()
     except KeyboardInterrupt:
-        print("Stopping...")
+        Warn("Stopping...")
         stop_event.set()
-    except sd.PortAudioError:
+    except sd.PortAudioError as error:
         Warn("Something went wrong with the audio port. Are you sure you plugged in into the configured port?")
+        Warn(error)
+        Warn(traceback.format_exc())
     finally:
-        print("Exiting core program.")
+        Warn("Exiting core program.")
