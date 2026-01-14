@@ -1,6 +1,6 @@
 import zmq
 
-from core.services import send_tts_service
+from jarvis.core.services import send_tts_service
 from shared.utils import Warn, find_anker_usb_mic, find_anker_usb_speaker
 
 

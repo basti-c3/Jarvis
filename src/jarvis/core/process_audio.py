@@ -5,7 +5,7 @@ import numpy as np
 from collections import deque
 
 import shared.stt_config as config
-from core.services import send_stt_service, send_tts_service
+from jarvis.core.services import send_stt_service, send_tts_service
 from jarvis.core.exceptions import *
 from jarvis.core.play_wakeword_sound import play_wakeword_sound
 from jarvis.core.process_command import record_command

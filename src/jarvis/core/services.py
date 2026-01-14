@@ -2,7 +2,7 @@ import zmq
 from ipc import client
 
 from shared.utils import STOP_SIGNAL
-from core.exceptions import QuitJarvis, SttServiceError, TtsServiceError
+from jarvis.core.exceptions import QuitJarvis, SttServiceError, TtsServiceError
 
 
 def send_stt_service(msg=None, stop=False):
