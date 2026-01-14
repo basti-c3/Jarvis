@@ -1,7 +1,7 @@
 import numpy as np
 import zmq
 
-from ipc import client
+from shared.ipc import client
 from jarvis.core.exceptions import QuitJarvis
 from shared.Jarvis import jarvis
 from shared.utils import Warn, STOP_SIGNAL

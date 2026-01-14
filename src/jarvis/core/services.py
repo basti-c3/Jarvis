@@ -1,5 +1,5 @@
 import zmq
-from ipc import client
+from shared.ipc import client
 
 from shared.utils import STOP_SIGNAL
 from jarvis.core.exceptions import QuitJarvis, SttServiceError, TtsServiceError
