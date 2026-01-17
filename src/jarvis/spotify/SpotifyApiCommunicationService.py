@@ -8,7 +8,7 @@ import base64
 
 from dotenv import load_dotenv
 
-from exceptions import SpotifyConnectionError
+from jarvis.exceptions import SpotifyConnectionError
 from shared.paths import spotify_base_url, spotify_token_url, spotify_redirect_url, spotify_auth_url, \
     SPOTIFY_TOKEN_DIR_PATH
 from jarvis.spotify.ResponseError import ResponseError
