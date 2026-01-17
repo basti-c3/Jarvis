@@ -17,7 +17,7 @@ else:
     WAKE_WORD_PATH = SRC_DIR / "jarvis" / "settings" / "Jarvis_en_windows_v4_0_0.ppn"
 
 PRECAL_AUDIOS_PATH: Path = BASE_DIR / "data/precalculated_jarvis_audios"
-JARVIS_AWAKEN_PATH: Path = PRECAL_AUDIOS_PATH / "yes.wav"
+JARVIS_AWAKEN_PATH: Path = PRECAL_AUDIOS_PATH / "activation_sound.wav"
 JARVIS_SHUTDOWN_PATH: Path = PRECAL_AUDIOS_PATH / "shuttingdowngoodbyesir.wav"
 RESOURCE_DIR: Path = BASE_DIR / "src" / "resources"
 SPOTIFY_TOKEN_DIR_PATH = str(RESOURCE_DIR / "spotify_tokens")
