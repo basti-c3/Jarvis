@@ -1,4 +1,4 @@
-from shared.Jarvis import jarvis
+from jarvis.Jarvis import jarvis
 from jarvis.spotify.ResponseError import ResponseError
 from jarvis.spotify.spotify_utils import raise_spotify_response_error
 

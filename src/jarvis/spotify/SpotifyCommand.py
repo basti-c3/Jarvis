@@ -1,11 +1,11 @@
-from jarvis.spotify.SpotifyCommandTypes import PlayType, SpotifyCommandType, play_types
-from jarvis.spotify.SpotifyService import SpotifyService
+from jarvis.spotify.SpotifyCommandTypes import PlayType, SpotifyCommandType
 from jarvis.spotify.spotify_utils import *
+from jarvis.spotify.SpotifyService import spotify_service
 
 
 class SpotifyCommand:
     def __init__(self, command_str=""):
-        self.spotify_service = SpotifyService()
+        self.spotify_service = spotify_service
         self.artist_split_words = ['by', 'from']
         self.command_str = command_str.lower()
         self.type = None  # Is set in the extract method

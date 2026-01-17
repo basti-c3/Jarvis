@@ -8,7 +8,9 @@ import base64
 
 from dotenv import load_dotenv
 
-from jarvis.paths import spotify_base_url, spotify_token_url, spotify_redirect_url, spotify_auth_url, SPOTIFY_TOKEN_DIR_PATH
+from exceptions import SpotifyConnectionError
+from shared.paths import spotify_base_url, spotify_token_url, spotify_redirect_url, spotify_auth_url, \
+    SPOTIFY_TOKEN_DIR_PATH
 from jarvis.spotify.ResponseError import ResponseError
 from jarvis.spotify.spotify_utils import print_warning_response_json_if_possible
 from shared.utils import *
@@ -40,15 +42,15 @@ class SpotifyApiCommunicationService:
 
         # Connect device
         self.device_id = None
-        self._connect_device()
 
-    def _connect_device(self):
-        # Select the given device
-        devices = self.get_available_devices()
-        if devices:
-            self.device_id = devices[0]['id']  # Choose the first available device
-        else:
-            raise Exception("Error in SpotifyAPI __init__: No devices found to play at!")
+    def _ensure_device_connected(self):
+        """Connect device if not connected yet."""
+        if self.device_id is None:
+            devices = self.get_available_devices()
+            if devices:
+                self.device_id = devices[0]['id']
+            else:
+                raise SpotifyConnectionError("No devices found to play at!")
 
     def get_available_devices(self):
         """Retrieve a list of available Spotify Connect devices."""
@@ -190,20 +192,24 @@ class SpotifyApiCommunicationService:
 
     def get_top_tracks(self, artist_id):
         """Get the top tracks for an artist using their Spotify ID."""
+        self._ensure_device_connected()
         url = f"{self.base_url}/artists/{artist_id}/top-tracks"
         return self.get_tracks_by_query(url, "tracks")
 
     def get_album_tracks(self, album_id):
         """Get all tracks for an album using its Spotify ID."""
+        self._ensure_device_connected()
         url = f"{self.base_url}/albums/{album_id}/tracks"
         return self.get_tracks_by_query(url)
 
     def get_playlist_tracks(self, playlist_id):
         """Get all tracks for a playlist using its Spotify ID."""
+        self._ensure_device_connected()
         url = f"{self.base_url}/playlists/{playlist_id}/tracks"
         return self.get_tracks_by_query(url)
 
     def get_tracks_by_query(self, url, results_key='items'):
+        self._ensure_device_connected()
         headers = self.get_headers()
         params = {
             "market": "DE"  # Adjust market if needed
@@ -220,6 +226,7 @@ class SpotifyApiCommunicationService:
 
     def search(self, query, types='track,artist,album,playlist', limit=10):
         """Search for content on Spotify across multiple types."""
+        self._ensure_device_connected()
         url = f"{self.base_url}/search"
         headers = self.get_headers()
         params = {
@@ -239,6 +246,7 @@ class SpotifyApiCommunicationService:
 
     def search_track(self, query_str):
         """Search for a song by name and return its Spotify ID."""
+        self._ensure_device_connected()
         results = self.search(query_str, types="track")
         if results is not None:
             items = results.get('tracks', {}).get('items', [])
@@ -252,6 +260,7 @@ class SpotifyApiCommunicationService:
 
     def search_artist(self, artist_name):
         """Search for an artist by name and return their Spotify ID."""
+        self._ensure_device_connected()
         results = self.search(artist_name, types="artist")
         if results is not None:
             items = results.get('artists', {}).get('items', [])
@@ -265,6 +274,7 @@ class SpotifyApiCommunicationService:
 
     def search_album(self, album_name, artist_name=None):
         """Search for an album by name and return its Spotify ID."""
+        self._ensure_device_connected()
         if artist_name is not None:
             query_str = f'artist:"{artist_name}" album:"{album_name}"'
         else:
@@ -283,6 +293,7 @@ class SpotifyApiCommunicationService:
 
     def search_playlist(self, playlist_name, artist_name=None):
         """Search for a playlist by name and return its Spotify ID."""
+        self._ensure_device_connected()
         if artist_name is not None:
             query_str = f'artist:"{artist_name}" track:"{playlist_name}"'
             types = "track"  # When given artist_name as well ("some chilly music from Shakira"), search for tracks
@@ -303,6 +314,7 @@ class SpotifyApiCommunicationService:
 
     def play_tracks(self, track_uris, shuffle):
         """Play a list of track URIs on a specific device."""
+        self._ensure_device_connected()
         url = f"{self.base_url}/me/player/play"
         headers = self.get_headers()
 
@@ -324,6 +336,7 @@ class SpotifyApiCommunicationService:
 
     def stop(self):
         """Stop playback on the currently connected device."""
+        self._ensure_device_connected()
         if self.device_id is None:
             raise ConnectionError("No connected device found to stop playback.")
 
@@ -336,6 +349,7 @@ class SpotifyApiCommunicationService:
 
     def play(self):
         """Play the currently selected music, whatever that is."""
+        self._ensure_device_connected()
         if self.device_id is None:
             raise ConnectionError("No connected device found to play at.")
 
@@ -348,6 +362,7 @@ class SpotifyApiCommunicationService:
 
     def skip(self):
         """Skip the current song."""
+        self._ensure_device_connected()
         if self.device_id is None:
             raise ConnectionError("No connected device found to skip at.")
 
@@ -360,6 +375,7 @@ class SpotifyApiCommunicationService:
 
     def repeat_mode(self, on):
         """Set the repeat mode, so that the song will be repeated a lot."""
+        self._ensure_device_connected()
         if self.device_id is None:
             raise ConnectionError("No connected device found to repeat at.")
 
@@ -370,3 +386,6 @@ class SpotifyApiCommunicationService:
 
         if response.status_code not in [200, 204]:
             raise ResponseError(response)
+
+
+spotify_api_communication_service = SpotifyApiCommunicationService()

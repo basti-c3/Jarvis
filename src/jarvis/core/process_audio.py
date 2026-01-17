@@ -5,12 +5,13 @@ import numpy as np
 from collections import deque
 
 import shared.stt_config as config
-from jarvis.core.services import send_stt_service, send_tts_service
-from jarvis.core.exceptions import *
+from jarvis.utils import send_stt_service, send_tts_service
+from jarvis.exceptions import *
 from jarvis.core.play_wakeword_sound import play_wakeword_sound
 from jarvis.core.process_command import record_command
-from jarvis.paths import JARVIS_AWAKEN_PATH, JARVIS_SHUTDOWN_PATH
-from shared.Jarvis import jarvis
+from shared.paths import JARVIS_AWAKEN_PATH, JARVIS_SHUTDOWN_PATH
+from jarvis.Jarvis import jarvis
+from shared.Anker import anker
 from shared.stop_event import stop_event
 from shared.utils import Warn
 from shared.utils import play_audio_file
@@ -79,6 +80,8 @@ def continuous_processing(test_command=None):
                     raise SttServiceError(e)
                 except TtsServiceError as e:
                     raise TtsServiceError(e)
+                except SpotifyConnectionError as e:
+                    raise SpotifyConnectionError(e)
                 except Exception as error:
                     command_finished = True  # Reset buffers after error to start anew
                     Warn(str(error))
@@ -92,7 +95,7 @@ def continuous_processing(test_command=None):
         except queue.Empty:
             continue  # Continue if the queue is empty
         except QuitJarvis:
-            play_audio_file(JARVIS_SHUTDOWN_PATH, jarvis.anker_speaker_device, jarvis.audio_speaker_sample_rate)
+            play_audio_file(JARVIS_SHUTDOWN_PATH, anker.anker_speaker_device, anker.audio_speaker_sample_rate)
             send_stt_service(stop=True)
             send_tts_service(stop=True)
             Warn("Jarvis stopped.")
@@ -102,6 +105,9 @@ def continuous_processing(test_command=None):
             jarvis.say("Sorry Sir, but the speech service is not responding.")
         except TtsServiceError as e:
             Warn(e)  # Don't say anything here, as that might create an infinite loop
+        except SpotifyConnectionError as e:
+            Warn(e)
+            jarvis.say("Sorry Sir, but no spotify device was found to play at.")
         except Exception as e:
             print(f"Error recognizing vosk_model: {e}")
             traceback.print_exc()

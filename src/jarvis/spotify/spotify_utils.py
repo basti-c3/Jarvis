@@ -1,6 +1,6 @@
 from requests import Response
 
-from shared.Jarvis import jarvis
+from jarvis.Jarvis import jarvis
 from shared.utils import Warn
 
 

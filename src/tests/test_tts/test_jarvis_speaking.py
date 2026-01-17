@@ -1,4 +1,4 @@
-from shared.Jarvis import jarvis
+from jarvis.Jarvis import jarvis
 
 
 class TestCreatingAudioOutput:

@@ -6,7 +6,7 @@ from TTS.tts.models.xtts import XttsAudioConfig, XttsArgs, Xtts
 from TTS.config.shared_configs import BaseDatasetConfig
 
 from TTS.api import TTS
-from jarvis.paths import XTTS_MODEL_PATH, DEFAULT_OUT_TEXT
+from shared.paths import XTTS_MODEL_PATH, DEFAULT_OUT_TEXT
 from tts_service.text_to_speech_dev.VoiceConversionModel import VoiceConversionModel
 
 

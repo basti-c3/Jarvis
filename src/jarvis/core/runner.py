@@ -8,7 +8,7 @@ from jarvis.core.process_audio import continuous_processing
 from shared.stop_event import stop_event
 from shared import stt_config as config
 from shared.utils import Warn
-from shared.Jarvis import jarvis
+from shared.Anker import anker
 
 
 def run_recognition(command: str = None):
@@ -23,12 +23,12 @@ def run_recognition(command: str = None):
 
     try:
         with sd.InputStream(
-                device=jarvis.anker_mic_device,
-                samplerate=jarvis.audio_mic_sample_rate,
+                device=anker.anker_mic_device,
+                samplerate=anker.audio_mic_sample_rate,
                 channels=config.CHANNELS,
                 dtype='int16',  # Windows does not work with float32, it just silently doesnt call callback
                 callback=audio_callback,
-                blocksize=int(config.BUFFER_DURATION * jarvis.audio_mic_sample_rate),
+                blocksize=int(config.BUFFER_DURATION * anker.audio_mic_sample_rate),
         ):
             stop_event.wait()
     except KeyboardInterrupt:

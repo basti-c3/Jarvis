@@ -1,13 +1,13 @@
 import threading
 import torch
 
-from shared.Jarvis import jarvis
 from TTS.tts.configs.xtts_config import XttsConfig
 from TTS.tts.models.xtts import XttsAudioConfig, XttsArgs
 from TTS.config.shared_configs import BaseDatasetConfig
 
 from TTS.api import TTS
-from jarvis.paths import XTTS_MODEL_PATH, PRECAL_AUDIOS_PATH
+from shared.Anker import anker
+from shared.paths import XTTS_MODEL_PATH, PRECAL_AUDIOS_PATH
 from shared.utils import Warn, play_audio_file
 
 
@@ -22,7 +22,7 @@ def load_xtts_model_from_checkpoint():
 
 def play_audio(filename):
     filepath = str(PRECAL_AUDIOS_PATH / f"{filename}.wav")
-    play_audio_file(filepath, jarvis.anker_speaker_device, jarvis.audio_speaker_sample_rate)
+    play_audio_file(filepath, anker.anker_speaker_device, anker.audio_speaker_sample_rate)
 
 
 def say_with_model(self, text):
@@ -30,13 +30,12 @@ def say_with_model(self, text):
         # Don't say multiple stuff at once
         return
     print("Dont wait for me,I am doing something parallelly. Processing...")
-    from shared.Jarvis import jarvis
 
     def run():
+        from tts_service.JarvisTTS import jarvisTTS
         try:
             self.processing = True
-            tts_model = jarvis.tts
-            tts_model.create_and_play_audio_from_text(text)
+            jarvisTTS.create_and_play_audio_from_text(text)
         except Exception as e:
             Warn("Jarvis speaking error:", e)
         finally:

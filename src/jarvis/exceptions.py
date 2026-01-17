@@ -8,3 +8,7 @@ class SttServiceError(Exception):
 
 class TtsServiceError(Exception):
     pass
+
+
+class SpotifyConnectionError(Exception):
+    pass

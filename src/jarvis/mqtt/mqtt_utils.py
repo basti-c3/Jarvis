@@ -1,6 +1,6 @@
 import os
 
-from shared.Jarvis import jarvis
+from jarvis.Jarvis import jarvis
 from shared.utils import Warn
 
 MQTT_BROKER = os.getenv('MQTT_BROKER')  # Replace with your Mosquitto broker IP

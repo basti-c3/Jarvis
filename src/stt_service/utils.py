@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 import shared.stt_config as config
-from shared.Jarvis import jarvis
+from stt_service.JarvisSTT import jarvisSTT
 from shared.utils import Warn
 
 
@@ -27,7 +27,7 @@ def get_command_text(audio_bytes):
 
 def turn_speech_to_text(audio_bytes):
     start = datetime.now()
-    recognizer = jarvis.recognizer
+    recognizer = jarvisSTT.recognizer
     if recognizer.AcceptWaveform(audio_bytes):
         result = recognizer.Result()
     else:

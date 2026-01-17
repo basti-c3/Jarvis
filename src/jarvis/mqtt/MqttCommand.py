@@ -1,10 +1,10 @@
 from jarvis.mqtt.MqttCommandTypes import MqttCommandType
-from jarvis.mqtt.MqttService import MqttService
+from jarvis.mqtt.MqttService import mqtt_service
 
 
 class MqttCommand:
     def __init__(self, command_str=""):
-        self.mqtt_service = MqttService()
+        self.mqtt_service = mqtt_service
         self.command_str = command_str.lower()
         self.type = None  # Is set in the extract method
 

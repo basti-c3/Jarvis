@@ -1,6 +1,7 @@
 import numpy as np
 
-from shared.Jarvis import jarvis
+from shared.Anker import anker
+from jarvis.Jarvis import jarvis
 from shared.utils import resample_audio
 from shared import stt_config as config
 
@@ -9,7 +10,7 @@ def audio_callback(indata, frames, time, status):
     """Callback function for receiving audio data."""
     # Flatten and convert to int16
     pcm = indata[:, 0].astype(np.int16)
-    pcm_resampled = resample_audio(pcm, jarvis.audio_mic_sample_rate, config.AUDIO_RATE)
+    pcm_resampled = resample_audio(pcm, anker.audio_mic_sample_rate, config.AUDIO_RATE)
 
     # Split into Porcupine-sized frames
     frame_len = jarvis.wake_word.frame_length()

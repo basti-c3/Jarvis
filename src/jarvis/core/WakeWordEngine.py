@@ -2,7 +2,7 @@ import os
 
 import pvporcupine
 
-from jarvis.paths import WAKE_WORD_PATH
+from shared.paths import WAKE_WORD_PATH
 
 
 class WakeWordEngine:

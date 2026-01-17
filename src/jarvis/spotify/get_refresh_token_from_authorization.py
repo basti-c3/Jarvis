@@ -4,7 +4,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from jarvis.paths import spotify_token_url, spotify_redirect_url
+from shared.paths import spotify_token_url, spotify_redirect_url
 from shared.utils import Warn
 
 

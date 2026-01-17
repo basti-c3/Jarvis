@@ -38,7 +38,7 @@ def create_jarvis_output(sentences):
 
 
 sentences = [
-    "Shutting down. Goodbye Sir.",
+    "Sorry Sir, but no spotify device was found to play at.",
 ]
 create_jarvis_output(sentences)
 

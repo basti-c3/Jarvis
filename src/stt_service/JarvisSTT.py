@@ -1,7 +1,7 @@
 import os
 from vosk import Model, KaldiRecognizer
 import shared.stt_config as config
-from jarvis.paths import STT_MODEL_PATH
+from shared.paths import STT_MODEL_PATH
 
 
 class JarvisSTT:
@@ -19,3 +19,6 @@ class JarvisSTT:
         recognizer = KaldiRecognizer(model, config.AUDIO_RATE)
         self.stt = model
         self.recognizer = recognizer
+
+
+jarvisSTT = JarvisSTT()

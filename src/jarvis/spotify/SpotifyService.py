@@ -1,13 +1,13 @@
-from shared.Jarvis import jarvis
+from jarvis.Jarvis import jarvis
 from jarvis.spotify.SpotifyCommandTypes import PlayType
-from jarvis.spotify.SpotifyApiCommunicationService import SpotifyApiCommunicationService
 from jarvis.spotify.spotify_action import spotify_action
+from jarvis.spotify.SpotifyApiCommunicationService import spotify_api_communication_service
 from shared.utils import *
 
 
 class SpotifyService:
     def __init__(self):
-        self.spotify_api = SpotifyApiCommunicationService()
+        self.spotify_api = spotify_api_communication_service
 
     def play_artist(self, artist_name):
         """Play an artist's top tracks."""
@@ -121,3 +121,6 @@ class SpotifyService:
             jarvis.say("Alright, let's make an infinite loop of this song!")
         else:
             jarvis.say("Turning repeat mode off again.")
+
+
+spotify_service = SpotifyService()
